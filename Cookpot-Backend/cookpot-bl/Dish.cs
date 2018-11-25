@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace cookpot_bl {
+namespace cookpot_bl
+{
 
-    public class Dish {
+    public class Dish
+    {
         public Dish()
         {
             this._ctime = DateTime.Now;
@@ -11,13 +13,13 @@ namespace cookpot_bl {
 
         private DateTime _ctime;
 
-        public DateTime creationTime{ get {return this._ctime; } }
+        public DateTime creationTime { get { return this._ctime; } }
 
         // things needed to prepare this dish (e.g. large pot)
         public List<CookingUtensil> CookingUtensils { get; set; }
 
         public string Description { get; set; }
-        
+
         //List of Image Pathes
         public List<string> Imagery { get; set; }
 
@@ -37,7 +39,7 @@ namespace cookpot_bl {
 
         // Name of the Dish
         public string Title { get; set; }
-        
+
         // E.g. Soup, Poultry, Sidedish
         public string Type { get; set; }
 

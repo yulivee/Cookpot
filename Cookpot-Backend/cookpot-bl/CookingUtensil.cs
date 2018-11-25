@@ -1,8 +1,10 @@
 using System;
 
-namespace cookpot_bl {
+namespace cookpot_bl
+{
 
-    public class CookingUtensil {
+    public class CookingUtensil
+    {
         public string Name { get; set; }
 
     }

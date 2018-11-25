@@ -1,9 +1,12 @@
 using System;
 
-namespace cookpot_bl {
-    public class DishManager {
+namespace cookpot_bl
+{
+    public class DishManager
+    {
 
-        public Dish create(string Title){
+        public Dish create(string Title)
+        {
             Dish newDish = new Dish();
             newDish.Title = Title;
             return newDish;

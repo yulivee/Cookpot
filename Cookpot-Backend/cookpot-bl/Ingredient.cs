@@ -1,11 +1,13 @@
 using System;
 
-namespace cookpot_bl {
+namespace cookpot_bl
+{
 
-    public class Ingredient {
-         public string Name { get; set; }
-         public UnitofMeasurement Measure{ get; set; }
+    public class Ingredient
+    {
+        public string Name { get; set; }
+        public UnitofMeasurement Measure { get; set; }
 
-        
+
     }
 }
