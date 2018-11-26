@@ -12,7 +12,10 @@ namespace cookpot_al
         private string _specialSecret;
 
         // custom getter/setter methods
-        public string SpecialSecret{ get {return this._specialSecret; } set {this._specialSecret = value; }}
+        public string SpecialSecret{ 
+            get {return this._specialSecret; } 
+            set {this._specialSecret = value; }
+            }
     }
 
     public class SubView : View, Model

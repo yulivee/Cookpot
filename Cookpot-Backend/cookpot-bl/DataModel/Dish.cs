@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
+using cookpot.bl.UserManagement;
 
-namespace cookpot_bl
+namespace cookpot.bl.DataModel
 {
 
     public class Dish
     {
-        public Dish()
-        {
-            this._ctime = DateTime.Now;
-        }
-
-        private DateTime _ctime;
-
-        public DateTime creationTime { get { return this._ctime; } }
+        public DateTime creationTime { get; set; }
 
         // things needed to prepare this dish (e.g. large pot)
         public List<CookingUtensil> CookingUtensils { get; set; }

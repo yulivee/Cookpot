@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace cookpot_bl
+namespace cookpot.bl.DataModel
 {
     public class Recipe
     {

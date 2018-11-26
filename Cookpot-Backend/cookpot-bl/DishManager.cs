@@ -1,17 +1,12 @@
 using System;
+using cookpot.bl.DataModel;
 
-namespace cookpot_bl
+namespace cookpot.bl
 {
     public class DishManager
     {
 
-        public Dish create(string Title)
-        {
-            Dish newDish = new Dish();
-            newDish.Title = Title;
-            return newDish;
-        }
-
+        public void create(Dish dish){ }
         public void read(Dish dish) { }
         public void update(Dish dish) { }
         public void delete(Dish dish) { }

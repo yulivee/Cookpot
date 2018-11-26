@@ -1,6 +1,6 @@
 ﻿using System;
 using cookpot_al;
-using cookpot_bl;
+using cookpot.bl;
 
 namespace cookpot_cli
 {

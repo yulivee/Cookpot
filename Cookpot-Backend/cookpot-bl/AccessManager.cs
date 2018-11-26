@@ -1,15 +1,36 @@
 using System;
+using System.Collections.Generic;
 
-namespace cookpot_bl
+namespace cookpot.bl
 {
 
-    public class AccessManager
+    public class AccessManager : IManager<string>
     {
         public void checkAccessRights() { }
-        public void create() { }
-        public void read() { }
-        public void update() { }
-        public void delete() { }
 
+        public string Create(string obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> Create(IEnumerable<string> objs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Update(string obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> Update(IEnumerable<string> objs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

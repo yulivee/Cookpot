@@ -1,6 +1,6 @@
 using System;
 
-namespace cookpot_bl
+namespace cookpot.bl.UserManagement
 {
     public class User
     {

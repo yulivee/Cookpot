@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace cookpot_al
+namespace cookpot.bl
 {
     interface IManager<T> {
         T Create(T obj);

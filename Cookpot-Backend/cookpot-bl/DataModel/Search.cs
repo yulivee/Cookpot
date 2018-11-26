@@ -1,6 +1,6 @@
 using System;
 
-namespace cookpot_bl
+namespace cookpot.bl.DataModel
 {
     public class Search
     {
