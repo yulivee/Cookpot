@@ -1,15 +1,34 @@
 using System;
+using System.Collections.Generic;
 using cookpot.bl.DataModel;
 
 namespace cookpot.bl
 {
-    public class DishManager
+    public class DishManager : IManager<Dish>
     {
+        public Dish Create(Dish obj)
+        {
+            throw new NotImplementedException();
+        }
 
-        public void create(Dish dish){ }
-        public void read(Dish dish) { }
-        public void update(Dish dish) { }
-        public void delete(Dish dish) { }
+        public IEnumerable<Dish> Create(IEnumerable<Dish> objs)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Dish Update(Dish obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Dish> Update(IEnumerable<Dish> objs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(Dish obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

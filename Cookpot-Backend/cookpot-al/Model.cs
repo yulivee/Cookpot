@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace cookpot_al
+namespace cookpot.al
 {
     public interface Model
     {

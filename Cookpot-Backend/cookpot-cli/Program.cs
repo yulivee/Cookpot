@@ -1,8 +1,8 @@
 ﻿using System;
-using cookpot_al;
+using cookpot.al;
 using cookpot.bl;
 
-namespace cookpot_cli
+namespace cookpot.cli
 {
     class Program
     {
