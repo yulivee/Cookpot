@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using cookpot.bl;
 using VDS.RDF;
 using VDS.RDF.Query;
+using VDS.RDF.Parsing;
+using VDS.RDF.Storage;
 
 namespace cookpot.bl.DataStorage
 {
@@ -43,7 +45,7 @@ namespace cookpot.bl.DataStorage
             {
                 //Print out the Results
                 SparqlResultSet rset = (SparqlResultSet)results;
-                string rawQueryResult;
+                string rawQueryResult ="";
                 foreach (SparqlResult result in rset)
                 {
                     rawQueryResult = rawQueryResult + result.ToString() + "\n";
