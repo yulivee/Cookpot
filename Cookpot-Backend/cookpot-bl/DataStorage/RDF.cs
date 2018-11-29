@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
+using cookpot.bl;
 using VDS.RDF;
 using VDS.RDF.Query;
-using VDS.RDF.Storage;
 
 namespace cookpot.bl.DataStorage
 {
-    public class RDF : IDBAccess<string>
+    public class RDF : IManager<string>
     {
+
+        private const string _fusekiURI = "https://fuseki.voiding-warranties.de/cookpot/data";
+        private const string _graphURI = "";
+
+        private FusekiConnector _fuseki;
+
         public RDF()
         {
             this._fuseki = new FusekiConnector(_fusekiURI);
-
         }
-        
-        private const string _fusekiURI = "https://fuseki.voiding-warranties.de/cookpot/data";
-        private FusekiConnector _fuseki;
 
         public string Create(string obj)
         {
@@ -32,22 +34,28 @@ namespace cookpot.bl.DataStorage
             throw new NotImplementedException();
         }
 
-        public SparqlResultSet Read(string obj)
+        public string Read(string obj)
         {
-            Object results = this._fuseki.Query(
-                                                "SELECT ?subject ?predicate ?object WHERE {" +
-                                                " ?subject ?predicate ?object }" +
-                                                " LIMIT 25");
-                if (results is SparqlResultSet)
+            //Execute a raw SPARQL Query
+            //Should get a SparqlResultSet back from a SELECT query
+            Object results = this._fuseki.ExecuteQuery("SELECT * WHERE { { ?s ?p ?o } LIMIT 10 }");
+            if (results is SparqlResultSet)
+            {
+                //Print out the Results
+                SparqlResultSet rset = (SparqlResultSet)results;
+                string rawQueryResult;
+                foreach (SparqlResult result in rset)
                 {
-                        //Print the results
-                        SparqlResultSet rset = (SparqlResultSet)results;
-                        return rset;
+                    rawQueryResult = rawQueryResult + result.ToString() + "\n";
                 }
-                else
-                {
-                        throw new Exception("Did not get a SPARQL Result Set as expected");
-                }
+
+                return rawQueryResult;
+            }
+            else
+            {
+                throw Exception();
+            }
+
 
         }
 
