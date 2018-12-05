@@ -1,0 +1,33 @@
+# https://github.com/dotnetrdf/dotnetrdf/wiki/UserGuide-Updating-With-SPARQL
+
+//Get an Update Parser
+		SparqlUpdateParser parser = new SparqlUpdateParser();
+
+		//Generate a Command
+		SparqlParameterizedString cmdString = new SparqlParameterizedString();
+		cmdString.CommandText = "LOAD <http://dbpedia.org/resource/Southampton> INTO <http://example.org/Soton>";
+
+		//Parse the command into a SparqlUpdateCommandSet
+		SparqlUpdateCommandSet cmds = parser.ParseFromString(cmdString);
+
+		//Connect to Sesame (which does not support SPARQL Update itself)
+		//and create a GenericUpdateProcessor to apply the update
+		FusekiConnector fuseki = new FusekiConnector("http://localhost:8080/openrdf-sesame", "repository");
+		GenericUpdateProcessor processor = new GenericUpdateProcessor(fuseki);
+		processor.ProcessCommandSet(cmds);
+
+		//We should now have a Graph in our dataset as a result of the LOAD update
+		//So we'll retrieve this and print it to the Console
+		IGraph g = new Graph();
+		sesame.LoadGraph(g, "http://example.org/Soton");
+		NTriplesFormatter formatter = new NTriplesFormatter();
+		foreach (Triple t in g.Triples)
+		{
+			Console.WriteLine(t.ToString(formatter));
+		}
+
+
+# http://www.dotnetrdf.org/api/html/M_VDS_RDF_Storage_FusekiConnector_Update.htm
+
+FusekiConnector.Update( string sparqlUpdate );
+FusekiConnector.Update( string sparqlUpdate, AsyncStorageCallback callback, Object state );
