@@ -14,6 +14,9 @@ namespace cookpot.bl.DataModel
 
         public string Description { get; set; }
 
+        // Person which wrote the recipe
+        public string Author { get; set; }
+
         //List of Image Pathes
         public List<string> Imagery { get; set; }
 
