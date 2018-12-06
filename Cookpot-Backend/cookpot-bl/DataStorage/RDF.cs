@@ -29,9 +29,7 @@ namespace cookpot.bl.DataStorage
         {
 
             var SparqlUpdateStatement = new StringBuilder();
-            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>"); //   .AppendLine(obj?.Title??"");
-            SparqlUpdateStatement.AppendLine("INSERT DATA {"); 
-            SparqlUpdateStatement.AppendLine("a cp:Dish;"); 
+            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA {").AppendLine("a cp:Dish;"); 
             // not looking nice. Ask for better method for doing this
             if ( dish.Title != null ) { SparqlUpdateStatement.AppendLine("cp:title "+dish.Title.ToString()+";"); }
             if ( dish.Description != null ) { SparqlUpdateStatement.AppendLine("cp:description "+dish.Description.ToString()+";"); }
