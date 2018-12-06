@@ -1,0 +1,30 @@
+            // var z = x == null ? "nope" : x.ToString();
+
+            // ?? => return nope if left side is null
+            // var y = x?.ToString() ?? "nope";
+
+Lamda ohne Return
+Action<string,string> conditionalAppend = (property, value) =>
+{ 
+    if (value == null) return;
+    SparqlUpdateStatement.AppendLine($"cp:{property} {value};);
+};
+
+Func: Lamda mit Rückgabewert
+
+Read: Delegaten
+
+public static class StringBuilderExtension {
+    public static void conditionalAppend<T>( this StringBuilder builder, string property, T value) {
+
+        if (value == null) return;
+        SparqlUpdateStatement.AppendLine($"cp:{property} {value};);
+
+    }
+}
+
+
+SparqlUpdateStatement.conditionalAppend("title",dish.Title);
+
+
+public Nullable<int> ServiceSize { get; set; }

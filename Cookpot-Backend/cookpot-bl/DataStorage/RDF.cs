@@ -23,71 +23,79 @@ namespace cookpot.bl.DataStorage
             this._fusekiURI = uri;
             this._graphURI = graphURI;
             this._fuseki = new FusekiConnector(_fusekiURI);
-        } 
+        }
 
         public Dish Create(Dish dish)
         {
 
             var SparqlUpdateStatement = new StringBuilder();
-            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA {").AppendLine("a cp:Dish;"); 
+            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA {").AppendLine("a cp:Dish;");
             // not looking nice. Ask for better method for doing this
-            if ( dish.Title != null ) { SparqlUpdateStatement.AppendLine("cp:title "+dish.Title.ToString()+";"); }
-            if ( dish.Description != null ) { SparqlUpdateStatement.AppendLine("cp:description "+dish.Description.ToString()+";"); }
-            if ( dish.Source != null ) { SparqlUpdateStatement.AppendLine("cp:source "+dish.Source?.ToString()+";"); }
-            if ( dish.Author != null ) { SparqlUpdateStatement.AppendLine("cp:author "+dish.Author.ToString()+";"); }
+            SparqlUpdateStatement.conditionalAppend("cp:title ", dish.Title);
+            SparqlUpdateStatement.conditionalAppend("cp:description ", dish.Description);
+            SparqlUpdateStatement.conditionalAppend("cp:source ", dish.Source);
+            SparqlUpdateStatement.conditionalAppend("cp:author ", dish.Author);
             // TODO: how do I test if ServingSize is set?
-            if ( dish.ServingSize != null ) { SparqlUpdateStatement.AppendLine("cp:servings "+dish.ServingSize.ToString()+";"); }
-            if ( dish.ServingSizeMin != null ) { SparqlUpdateStatement.AppendLine("cp:servings "+dish.ServingSizeMin.ToString()+";"); }
-            if ( dish.ServingSizeMax != null ) { SparqlUpdateStatement.AppendLine("cp:servings "+dish.ServingSizeMax.ToString()+";"); }
+            SparqlUpdateStatement.conditionalAppend("cp:servings ", dish.ServingSize);
+            SparqlUpdateStatement.conditionalAppend("cp:servings ", dish.ServingSizeMin);
+            SparqlUpdateStatement.conditionalAppend("cp:servings ", dish.ServingSizeMax);
             // cp:origin cp:china, cp:sichuan;
             // cp:cuisine cp:chinese;
             // cp:recipeType "Chicken","Poultry";
-            if ( dish.Ingredients != null ){
-                SparqlUpdateStatement.Append("cp:ingredient"); 
+            if (dish.Ingredients != null)
+            {
+                SparqlUpdateStatement.Append("cp:ingredient");
 
                 var listCount = 0;
-                foreach ( Ingredient ingredient in dish.Ingredients) {
-                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Ingredient;"); 
-                    if ( ingredient.Name != null ) { SparqlUpdateStatement.AppendLine("cp:ingredientName "+ingredient.Name.ToString()+";"); }
-                    if ( ingredient.Amount != null ) { SparqlUpdateStatement.AppendLine("cp:ingredientAmount "+ingredient.Amount.ToString()+";"); }
-                    if ( ingredient.Measure != null ) { SparqlUpdateStatement.AppendLine("cp:ingredientMeasure "+ingredient.Measure.ToString()+";"); }
+                foreach (Ingredient ingredient in dish.Ingredients)
+                {
+                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Ingredient;");
+                    if (ingredient.Name != null) { SparqlUpdateStatement.AppendLine("cp:ingredientName " + ingredient.Name.ToString() + ";"); }
+                    if (ingredient.Amount != null) { SparqlUpdateStatement.AppendLine("cp:ingredientAmount " + ingredient.Amount.ToString() + ";"); }
+                    if (ingredient.Measure != null) { SparqlUpdateStatement.AppendLine("cp:ingredientMeasure " + ingredient.Measure.ToString() + ";"); }
                     // cp:ingredientUnit cp:lb; ??
-                    SparqlUpdateStatement.Append("]"); 
+                    SparqlUpdateStatement.Append("]");
                     listCount++;
-                    SparqlUpdateStatement.AppendLine(listCount == dish.Ingredients.Count ? ";" :  ",");
+                    SparqlUpdateStatement.AppendLine(listCount == dish.Ingredients.Count ? ";" : ",");
                 }
             }
 
-            if ( dish.Recipes != null ) {
-                SparqlUpdateStatement.Append("cp:recipe"); 
+            if (dish.Recipes != null)
+            {
+                SparqlUpdateStatement.Append("cp:recipe");
 
                 var listCount = 0;
-                foreach ( Recipe recipe in dish.Recipes) {
-                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_"+listCount+" [").AppendLine("a cp:Recipe;");
-                    if ( recipe.durationTime != null) { SparqlUpdateStatement.AppendLine("cp:durationTime "+recipe.durationTime+";");}
-                    if ( recipe.durationUnit != null) { SparqlUpdateStatement.AppendLine("cp:durationUnit "+recipe.durationUnit+";");}
-                    if ( recipe.recipeType != null) { SparqlUpdateStatement.AppendLine("cp:recipeType "+recipe.recipeType+";");}
+                foreach (Recipe recipe in dish.Recipes)
+                {
+                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + listCount + " [").AppendLine("a cp:Recipe;");
+                    if (recipe.durationTime != null) { SparqlUpdateStatement.AppendLine("cp:durationTime " + recipe.durationTime + ";"); }
+                    if (recipe.durationUnit != null) { SparqlUpdateStatement.AppendLine("cp:durationUnit " + recipe.durationUnit + ";"); }
+                    if (recipe.recipeType != null) { SparqlUpdateStatement.AppendLine("cp:recipeType " + recipe.recipeType + ";"); }
 
-                    if ( recipe.Steps != null ){
-                        SparqlUpdateStatement.Append("cp:step"); 
-                        var stepCount= 0;
-                        foreach ( Step step in recipe.Steps) {
-                            SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_"+stepCount+" [").AppendLine("a cp:Step;");
-                            if ( step.Description != null) { SparqlUpdateStatement.AppendLine("cp:stepDescription "+step.Description+";"); }
-                            SparqlUpdateStatement.Append("]"); 
+                    if (recipe.Steps != null)
+                    {
+                        SparqlUpdateStatement.Append("cp:step");
+                        var stepCount = 0;
+                        foreach (Step step in recipe.Steps)
+                        {
+                            SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + stepCount + " [").AppendLine("a cp:Step;");
+                            if (step.Description != null) { SparqlUpdateStatement.AppendLine("cp:stepDescription " + step.Description + ";"); }
+                            SparqlUpdateStatement.Append("]");
                             stepCount++;
-                            SparqlUpdateStatement.AppendLine(stepCount == recipe.Steps.Count ? ";" :  ",");
+                            SparqlUpdateStatement.AppendLine(stepCount == recipe.Steps.Count ? ";" : ",");
 
                         }
                     }
-                    SparqlUpdateStatement.Append("]"); 
+                    SparqlUpdateStatement.Append("]");
                     listCount++;
-                    SparqlUpdateStatement.AppendLine(listCount == dish.Recipes.Count ? ";" :  ",");
+                    SparqlUpdateStatement.AppendLine(listCount == dish.Recipes.Count ? ";" : ",");
+                }
+
+                SparqlUpdateStatement.AppendLine("}");
+
+                this._fuseki.Update(SparqlUpdateStatement.ToString());
             }
 
-            SparqlUpdateStatement.AppendLine("}");
-
-            this._fuseki.Update(SparqlUpdateStatement.ToString());
         }
 
         public IEnumerable<Dish> Create(IEnumerable<Dish> objs)
@@ -109,7 +117,7 @@ namespace cookpot.bl.DataStorage
             {
                 //Print out the Results
                 SparqlResultSet rset = (SparqlResultSet)results;
-                string rawQueryResult ="";
+                string rawQueryResult = "";
                 foreach (SparqlResult result in rset)
                 {
                     rawQueryResult = rawQueryResult + result.ToString() + "\n";
