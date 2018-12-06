@@ -12,6 +12,8 @@ namespace cookpot.bl.DataModel
         // things needed to prepare this dish (e.g. large pot)
         public List<CookingUtensil> CookingUtensils { get; set; }
 
+        public List<Ingredient> Ingredients { get; set; }
+
         public string Description { get; set; }
 
         // Person which wrote the recipe
