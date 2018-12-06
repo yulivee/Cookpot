@@ -32,13 +32,6 @@ namespace cookpot.bl
             throw new NotImplementedException();
         }
 
-        public void ReadRecipeFull()
-        {
-            RDF fuseki = RDF.new;
-            Console.WriteLine(fuseki.Read("Test"));
-
-        }
-
         public Dish Read(Dish obj)
         {
             throw new NotImplementedException();

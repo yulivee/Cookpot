@@ -16,6 +16,8 @@ namespace cookpot.bl.DataStorage
         private readonly string _fusekiURI = "https://fuseki.voiding-warranties.de/cookpot/data";
         private readonly string _graphURI = "";
 
+        public bool debug = false;
+
         private FusekiConnector _fuseki;
 
         public RDF(string uri, string graphURI = "")
@@ -31,55 +33,55 @@ namespace cookpot.bl.DataStorage
             var SparqlUpdateStatement = new StringBuilder();
             SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA {").AppendLine("a cp:Dish;");
             // not looking nice. Ask for better method for doing this
-            SparqlUpdateStatement.conditionalAppend("cp:title ", dish.Title);
-            SparqlUpdateStatement.conditionalAppend("cp:description ", dish.Description);
-            SparqlUpdateStatement.conditionalAppend("cp:source ", dish.Source);
-            SparqlUpdateStatement.conditionalAppend("cp:author ", dish.Author);
+            SparqlUpdateStatement.conditionalAppend("title ", dish.Title);
+            SparqlUpdateStatement.conditionalAppend("description ", dish.Description);
+            SparqlUpdateStatement.conditionalAppend("source ", dish.Source);
+            SparqlUpdateStatement.conditionalAppend("author ", dish.Author);
             // TODO: how do I test if ServingSize is set?
-            SparqlUpdateStatement.conditionalAppend("cp:servings ", dish.ServingSize);
-            SparqlUpdateStatement.conditionalAppend("cp:servings ", dish.ServingSizeMin);
-            SparqlUpdateStatement.conditionalAppend("cp:servings ", dish.ServingSizeMax);
-            // cp:origin cp:china, cp:sichuan;
-            // cp:cuisine cp:chinese;
-            // cp:recipeType "Chicken","Poultry";
+            SparqlUpdateStatement.conditionalAppend("servings ", dish.ServingSize);
+            SparqlUpdateStatement.conditionalAppend("servings ", dish.ServingSizeMin);
+            SparqlUpdateStatement.conditionalAppend("servings ", dish.ServingSizeMax);
+            // origin china, sichuan;
+            // cuisine chinese;
+            // recipeType "Chicken","Poultry";
             if (dish.Ingredients != null)
             {
-                SparqlUpdateStatement.Append("cp:ingredient");
+                SparqlUpdateStatement.Append("ingredient");
 
                 var listCount = 0;
                 foreach (Ingredient ingredient in dish.Ingredients)
                 {
                     SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Ingredient;");
-                    if (ingredient.Name != null) { SparqlUpdateStatement.AppendLine("cp:ingredientName " + ingredient.Name.ToString() + ";"); }
-                    if (ingredient.Amount != null) { SparqlUpdateStatement.AppendLine("cp:ingredientAmount " + ingredient.Amount.ToString() + ";"); }
-                    if (ingredient.Measure != null) { SparqlUpdateStatement.AppendLine("cp:ingredientMeasure " + ingredient.Measure.ToString() + ";"); }
-                    // cp:ingredientUnit cp:lb; ??
+                    SparqlUpdateStatement.conditionalAppend("ingredientName ", ingredient.Name);
+                    SparqlUpdateStatement.conditionalAppend("ingredientAmount ", ingredient.Amount);
+                    SparqlUpdateStatement.conditionalAppend("ingredientMeasure ", ingredient.Measure);
+                }
+                    // ingredientUnit lb; ??
                     SparqlUpdateStatement.Append("]");
                     listCount++;
                     SparqlUpdateStatement.AppendLine(listCount == dish.Ingredients.Count ? ";" : ",");
-                }
             }
 
             if (dish.Recipes != null)
             {
-                SparqlUpdateStatement.Append("cp:recipe");
+                SparqlUpdateStatement.Append("recipe");
 
                 var listCount = 0;
                 foreach (Recipe recipe in dish.Recipes)
                 {
-                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + listCount + " [").AppendLine("a cp:Recipe;");
-                    if (recipe.durationTime != null) { SparqlUpdateStatement.AppendLine("cp:durationTime " + recipe.durationTime + ";"); }
-                    if (recipe.durationUnit != null) { SparqlUpdateStatement.AppendLine("cp:durationUnit " + recipe.durationUnit + ";"); }
-                    if (recipe.recipeType != null) { SparqlUpdateStatement.AppendLine("cp:recipeType " + recipe.recipeType + ";"); }
+                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + listCount + " [").AppendLine("a Recipe;");
+                    SparqlUpdateStatement.conditionalAppend("durationTime " , recipe.DurationTime);
+                    SparqlUpdateStatement.conditionalAppend("durationUnit " , recipe.DurationUnit);
+                    SparqlUpdateStatement.conditionalAppend("recipeType " , recipe.RecipeType);
 
                     if (recipe.Steps != null)
                     {
-                        SparqlUpdateStatement.Append("cp:step");
+                        SparqlUpdateStatement.Append("step");
                         var stepCount = 0;
                         foreach (Step step in recipe.Steps)
                         {
-                            SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + stepCount + " [").AppendLine("a cp:Step;");
-                            if (step.Description != null) { SparqlUpdateStatement.AppendLine("cp:stepDescription " + step.Description + ";"); }
+                            SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + stepCount + " [").AppendLine("a Step;");
+                            SparqlUpdateStatement.conditionalAppend("stepDescription ", step.Description);
                             SparqlUpdateStatement.Append("]");
                             stepCount++;
                             SparqlUpdateStatement.AppendLine(stepCount == recipe.Steps.Count ? ";" : ",");
@@ -93,8 +95,12 @@ namespace cookpot.bl.DataStorage
 
                 SparqlUpdateStatement.AppendLine("}");
 
+                if (this.debug == true) { Console.WriteLine(SparqlUpdateStatement.ToString()); return dish; }
+
                 this._fuseki.Update(SparqlUpdateStatement.ToString());
             }
+
+            return dish;
 
         }
 
@@ -110,8 +116,10 @@ namespace cookpot.bl.DataStorage
 
         public Dish Read(Dish obj)
         {
+            return obj;
             //Execute a raw SPARQL Query
             //Should get a SparqlResultSet back from a SELECT query
+            /* 
             Object results = this._fuseki.ExecuteQuery("SELECT * WHERE { { ?s ?p ?o } LIMIT 10 }");
             if (results is SparqlResultSet)
             {
@@ -129,7 +137,8 @@ namespace cookpot.bl.DataStorage
             {
                 throw new NotImplementedException();
             }
-
+            
+            */
 
         }
 

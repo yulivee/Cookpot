@@ -7,6 +7,14 @@ namespace cookpot.bl.DataModel
 
     public class Dish
     {
+        public Dish()
+        {
+            var ingredients = new List<Ingredient>();
+            var recipes = new List<Recipe>();
+            var users = new List<User>();
+            var cookingUtensils = new List<CookingUtensil>();
+        }
+
         public DateTime creationTime { get; set; }
 
         // things needed to prepare this dish (e.g. large pot)
@@ -32,6 +40,8 @@ namespace cookpot.bl.DataModel
 
         // Number of servings of this Dish
         public int ServingSize { get; set; }
+        public int ServingSizeMin { get; set; }
+        public int ServingSizeMax { get; set; }
 
         // Source of the Recipe, e.g. URL or Bookname + Page
         public string Source { get; set; }

@@ -1,7 +1,7 @@
-            // var z = x == null ? "nope" : x.ToString();
+var z = x == null ? "nope" : x.ToString();
 
-            // ?? => return nope if left side is null
-            // var y = x?.ToString() ?? "nope";
+// ?? => return nope if left side is null
+var y = x?.ToString() ?? "nope";
 
 Lamda ohne Return
 Action<string,string> conditionalAppend = (property, value) =>
@@ -28,3 +28,29 @@ SparqlUpdateStatement.conditionalAppend("title",dish.Title);
 
 
 public Nullable<int> ServiceSize { get; set; }
+ 
+
+             Console.WriteLine("Hello World!");
+            var hello = new Class1();
+            hello.Hello("C# is fancy");
+            hello.HelloDefault();
+            hello.HelloDefault("No default here");
+
+            Model modell = new SubView();
+
+/*
+ Action<string> # Function without return code follows
+ ( x )  =>   { }   # Function 
+
+ Action setter = ( string y ) => { do stuff };
+
+ */
+            Action<string> setter = (x) => modell.modelname = x;
+            setter("hello");
+
+
+            modell.modelname = "Sandra";
+            var sandra = modell.modelname;
+
+            var view = new View();
+            view.Viewname = "Benny";

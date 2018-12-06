@@ -1,6 +1,9 @@
 ﻿using System;
 using cookpot.al;
 using cookpot.bl;
+using cookpot.bl.DataStorage;
+using cookpot.bl.DataModel;
+using System.Collections.Generic;
 
 namespace cookpot.cli
 {
@@ -8,31 +11,62 @@ namespace cookpot.cli
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            var hello = new Class1();
-            hello.Hello("C# is fancy");
-            hello.HelloDefault();
-            hello.HelloDefault("No default here");
+            var sparqlEndpoint = new RDF("https://fuseki.voiding-warranties.de/cookpot/data");
+            sparqlEndpoint.debug = true;
 
-            Model modell = new SubView();
+            var testIngredient = new Ingredient(){
+                Name = "Magic Ingredient",
+                Amount = 1,
+            };
 
-/*
- Action<string> # Function without return code follows
- ( x )  =>   { }   # Function 
+            var testIngredient2 = new Ingredient(){
+                Name = "Second Magic Ingredient",
+                Amount = 3,
+            };
 
- Action setter = ( string y ) => { do stuff };
+            var testStep = new Step(){ Description = "Do this", };
+            var testStep2 = new Step(){ Description = "Do that", };
+            var testStep3 = new Step(){ Description = "Now Do that", };
 
- */
-            Action<string> setter = (x) => modell.modelname = x;
-            setter("hello");
+            var testRecipe = new Recipe() {
+                DurationTime = 30,
+                DurationUnit = "min",
+                RecipeType = "Preparation",
+
+                Steps = new List<Step>(){
+                    testStep,
+                    testStep2,
+                    testStep3
+                }
+            };
+
+            var testRecipe2 = new Recipe() {
+                DurationTime = 45,
+                DurationUnit = "min",
+                RecipeType = "Baking-Time",
+            };
 
 
-            modell.modelname = "Sandra";
-            var sandra = modell.modelname;
+            var testDish = new Dish() {
+                Title = "Another Testrecipe",
+                Description = "A very awesome Testdish which is very tasty",
+                Author = "Sandra Schuhmacher",
+                Source = "my testing cookbook",
+                ServingSize = 3,
 
-            var view = new View();
-            view.Viewname = "Benny";
+                Ingredients = new List<Ingredient>() {
+                        testIngredient,
+                        testIngredient2
+                },
 
-        }
+                Recipes = new List<Recipe>() {
+                    testRecipe,
+                    testRecipe2
+                },
+
+            };
+
+            sparqlEndpoint.Create(testDish);
+        }  
     }
 }
