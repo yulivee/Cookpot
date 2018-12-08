@@ -54,3 +54,32 @@ public Nullable<int> ServiceSize { get; set; }
 
             var view = new View();
             view.Viewname = "Benny";
+
+
+
+
+Working insert data:
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>
+
+INSERT DATA 
+{ 
+       cp:testin cp:name "Testing"@en.
+       cp:serious_testing cp:name "Very Serious Testing"@en.
+      
+      _:TestRecipe001
+      a cp:Dish;
+        cp:title "Fancy Testrecipe"@en;
+        cp:description "This is a Testrecipe to get fuseki sweating."@en;
+        cp:origin cp:testin, cp:serious_testing;
+}
+
+
+functional - eigenschaft (richtung parent ->child ) kann nur einmal existieren 
+inverse functional - eigenschaft (richtung child-> parent) kan nur 1x existieren
+transitive - vererbung von parent -> child
+symmetrisch  - vollduplex verbindung
+asymmetrisch - gerichtete verbindung
+reflexiv - verbindung die start und ende im selben objekt hat
+irreflexiv - verbindung kann nicht im selben objekt enden wenn sie in ihm startet

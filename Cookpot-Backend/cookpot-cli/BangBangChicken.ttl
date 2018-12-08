@@ -1,21 +1,26 @@
     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
     @prefix cp: <http://voiding-warranties.de/cookpot/1.0#> .
+    @prefix cpNS: <http://voiding-warranties.de/cookpot/1.0/> .
+
     #@prefix xsd: <http://www.w3.org/2001/XMLSchema-datatypes#> .
     @base <http://voding-warranties.de/cookpot/1.0#> .
 
-    cp:Dish rdf:type rdfs:Class .
-    cp:Recipe rdf:type rdfs:Class .
-    cp:Utility rdf:type rdfs:Class .
-    cp:Ingredient rdf:type rdfs:Class .
-    cp:Step rdf:type rdfs:Class .
-    cp:MeasureUnit rdf:type rdfs:Class .
-    cp:Origin rdf:type rdfs:Class .
-    cp:Cuisine rdf:type rdfs:Class .
+    <http://voiding-warranties.de/cookpot/1.0#Dish> rdf:type rdfs:Class .
+    <http://voiding-warranties.de/cookpot/1.0/Dish> rdf:type rdfs:Class .
 
-    cp:OriginCountry a cp:Origin .
-    cp:OriginRegion a cp:Origin .
-    cp:OriginCity a cp:Origin .
+#    cp:Recipe rdf:type rdfs:Class .
+#    cp:Utility rdf:type rdfs:Class .
+#    cp:Ingredient rdf:type rdfs:Class .
+#    cp:Step rdf:type rdfs:Class .
+#    cp:MeasureUnit rdf:type rdfs:Class .
+#    cp:Origin rdf:type rdfs:Class .
+#    cp:Cuisine rdf:type rdfs:Class .
+
+#    cp:OriginCountry a cp:Origin .
+#    cp:OriginRegion a cp:Origin .
+#    cp:OriginCity a cp:Origin .
 
     cp:china a cp:OriginCountry .
     cp:sichuan a cp:OriginRegion .
@@ -26,28 +31,29 @@
     cp:sichuan cp:name "Sichuan"@en, "Szechuan"@de.
 
 
-    cp:slice a cp:MeasureUnit  .
-    cp:lb a cp:MeasureUnit  .
-    cp:cup a cp:MeasureUnit .
-    cp:tbsp a cp:MeasureUnit .
-    cp:tsp a cp:MeasureUnit .
+#    cp:slice a cp:MeasureUnit  .
+#    cp:lb a cp:MeasureUnit  .
+#    cp:cup a cp:MeasureUnit .
+#    cp:tbsp a cp:MeasureUnit .
+#    cp:tsp a cp:MeasureUnit .
 
-    _:BangBangChicken 
-        a cp:Dish;
-        cp:title "Bang Bang Chicken: The Authentic Sichuan Version"@en;
-        cp:description "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce."@en;
-        cp:source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/"@en;
+    cpNS:BangBangChicken 
+#        a cp:Dish;
+#        cp:title "Bang Bang Chicken: The Authentic Sichuan Version"@en;
+#        cp:description "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce."@en;
+#        cp:source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/"@en;
         cp:origin cp:china, cp:sichuan;
         cp:cuisine cp:chinese;
         cp:recipeType "Chicken","Poultry";
-        cp:author "Judy";
-        cp:servings 3;
+#        cp:author "Judy";
+#        cp:servings 3;
         cp:servingsMin 2;
         cp:servingsMax 4;
-        cp:ingredient [
+        cp:ingredient 
+        [
             a rdf:Ingredient;
-            cp:ingredientName "large chicken breast"@en;
-            cp:ingredientAmount 1;
+#            cp:ingredientName "large chicken breast"@en;
+#            cp:ingredientAmount 1;
             cp:ingredientUnit cp:lb;
             cp:ingredientMeasure 0.5 
         ], 

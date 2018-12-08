@@ -31,45 +31,51 @@ namespace cookpot.bl.DataStorage
         {
 
             var SparqlUpdateStatement = new StringBuilder();
-            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA {").AppendLine("a cp:Dish;");
+            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA").AppendLine("{").AppendLine("a cp:Dish;");
+            SparqlUpdateStatement.AppendLine("   _:AnotherFancyDish");
             // not looking nice. Ask for better method for doing this
-            SparqlUpdateStatement.conditionalAppend("title ", dish.Title);
-            SparqlUpdateStatement.conditionalAppend("description ", dish.Description);
-            SparqlUpdateStatement.conditionalAppend("source ", dish.Source);
-            SparqlUpdateStatement.conditionalAppend("author ", dish.Author);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("title ", dish.Title);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("description ", dish.Description);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("source ", dish.Source);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("author ", dish.Author);
             // TODO: how do I test if ServingSize is set?
-            SparqlUpdateStatement.conditionalAppend("servings ", dish.ServingSize);
-            SparqlUpdateStatement.conditionalAppend("servings ", dish.ServingSizeMin);
-            SparqlUpdateStatement.conditionalAppend("servings ", dish.ServingSizeMax);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("servings ", dish.ServingSize);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("servings ", dish.ServingSizeMin);
+            SparqlUpdateStatement.Append("   ").conditionalAppend("servings ", dish.ServingSizeMax);
             // origin china, sichuan;
             // cuisine chinese;
             // recipeType "Chicken","Poultry";
             if (dish.Ingredients != null)
             {
-                SparqlUpdateStatement.Append("ingredient");
+                SparqlUpdateStatement.Append("   ").AppendLine("cp:ingredient");
 
                 var listCount = 0;
                 foreach (Ingredient ingredient in dish.Ingredients)
                 {
-                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Ingredient;");
-                    SparqlUpdateStatement.conditionalAppend("ingredientName ", ingredient.Name);
-                    SparqlUpdateStatement.conditionalAppend("ingredientAmount ", ingredient.Amount);
-                    SparqlUpdateStatement.conditionalAppend("ingredientMeasure ", ingredient.Measure);
+                    listCount++;
+                    SparqlUpdateStatement.Append("   ").AppendLine("[");
+                    SparqlUpdateStatement.Append("      ").AppendLine("a rdf:Ingredient;");
+                    SparqlUpdateStatement.Append("      ").conditionalAppend("ingredientName ", ingredient.Name);
+                    SparqlUpdateStatement.Append("      ").conditionalAppend("ingredientAmount ", ingredient.Amount);
+                    SparqlUpdateStatement.Append("      ").conditionalAppend("ingredientMeasure ", ingredient.Measure);
+                    SparqlUpdateStatement.Append("]").AppendLine(listCount == dish.Ingredients.Count ? ";" : ",");
+
                 }
                     // ingredientUnit lb; ??
-                    SparqlUpdateStatement.Append("]");
-                    listCount++;
-                    SparqlUpdateStatement.AppendLine(listCount == dish.Ingredients.Count ? ";" : ",");
             }
 
             if (dish.Recipes != null)
             {
-                SparqlUpdateStatement.Append("recipe");
+                SparqlUpdateStatement.Append("   ").Append("cp:recipe");
 
                 var listCount = 0;
                 foreach (Recipe recipe in dish.Recipes)
                 {
-                    SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + listCount + " [").AppendLine("a Recipe;");
+                    listCount++;
+                    SparqlUpdateStatement.Append("   ").AppendLine("[");
+                    SparqlUpdateStatement.Append("      ").AppendLine("a rdf:Seq;")
+                    .Append("      ").Append("      ").AppendLine("rdf:_" + listCount + " [")
+                    .Append("      ").Append("      ").AppendLine("a Recipe;");
                     SparqlUpdateStatement.conditionalAppend("durationTime " , recipe.DurationTime);
                     SparqlUpdateStatement.conditionalAppend("durationUnit " , recipe.DurationUnit);
                     SparqlUpdateStatement.conditionalAppend("recipeType " , recipe.RecipeType);
@@ -88,9 +94,9 @@ namespace cookpot.bl.DataStorage
 
                         }
                     }
-                    SparqlUpdateStatement.Append("]");
+                    SparqlUpdateStatement.Append("      ").Append("]");
                     listCount++;
-                    SparqlUpdateStatement.AppendLine(listCount == dish.Recipes.Count ? ";" : ",");
+                    SparqlUpdateStatement.Append("      ").AppendLine(listCount == dish.Recipes.Count ? ";" : ",");
                 }
 
                 SparqlUpdateStatement.AppendLine("}");
