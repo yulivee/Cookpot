@@ -7,6 +7,7 @@ using VDS.RDF.Query;
 using VDS.RDF.Parsing;
 using VDS.RDF.Storage;
 using System.Text;
+using VDS.RDF.Writing.Formatting;
 
 namespace cookpot.bl.DataStorage
 {
@@ -30,78 +31,19 @@ namespace cookpot.bl.DataStorage
         public Dish Create(Dish dish)
         {
 
-            var SparqlUpdateStatement = new StringBuilder();
-            SparqlUpdateStatement.AppendLine("PREFIX cp: <http://voiding-warranties.de/cookpot/1.0#>").AppendLine("INSERT DATA").AppendLine("{").AppendLine("a cp:Dish;");
-            SparqlUpdateStatement.AppendLine("   _:AnotherFancyDish");
-            // not looking nice. Ask for better method for doing this
-            SparqlUpdateStatement.Append("   ").conditionalAppend("title ", dish.Title);
-            SparqlUpdateStatement.Append("   ").conditionalAppend("description ", dish.Description);
-            SparqlUpdateStatement.Append("   ").conditionalAppend("source ", dish.Source);
-            SparqlUpdateStatement.Append("   ").conditionalAppend("author ", dish.Author);
-            // TODO: how do I test if ServingSize is set?
-            SparqlUpdateStatement.Append("   ").conditionalAppend("servings ", dish.ServingSize);
-            SparqlUpdateStatement.Append("   ").conditionalAppend("servings ", dish.ServingSizeMin);
-            SparqlUpdateStatement.Append("   ").conditionalAppend("servings ", dish.ServingSizeMax);
-            // origin china, sichuan;
-            // cuisine chinese;
-            // recipeType "Chicken","Poultry";
-            if (dish.Ingredients != null)
-            {
-                SparqlUpdateStatement.Append("   ").AppendLine("cp:ingredient");
 
-                var listCount = 0;
-                foreach (Ingredient ingredient in dish.Ingredients)
-                {
-                    listCount++;
-                    SparqlUpdateStatement.Append("   ").AppendLine("[");
-                    SparqlUpdateStatement.Append("      ").AppendLine("a rdf:Ingredient;");
-                    SparqlUpdateStatement.Append("      ").conditionalAppend("ingredientName ", ingredient.Name);
-                    SparqlUpdateStatement.Append("      ").conditionalAppend("ingredientAmount ", ingredient.Amount);
-                    SparqlUpdateStatement.Append("      ").conditionalAppend("ingredientMeasure ", ingredient.Measure);
-                    SparqlUpdateStatement.Append("]").AppendLine(listCount == dish.Ingredients.Count ? ";" : ",");
+            var Graph = new Graph();
+            Graph.NamespaceMap.AddNamespace("cp", new Uri("http://voiding-warranties.de/cookpot/1.0#"));
+            Graph.NamespaceMap.AddNamespace("cpD", new Uri("http://voiding-warranties.de/cookpot/1.0/Dishes/"));
+            var NewDish = Graph.CreateUriNode("cpD:BangBangChicken");
+            var NewTitle = Graph.CreateLiteralNode("cp:title Bang Bang Chicken: The Authentic Sichuan Version","@en");
 
+
+                if (this.debug == true) { 
+                    var ttlFormatter = new UncompressedTurtleFormatter();
+                    Console.WriteLine(ttlFormatter.Format(NewDish)); 
+                    return dish; 
                 }
-                    // ingredientUnit lb; ??
-            }
-
-            if (dish.Recipes != null)
-            {
-                SparqlUpdateStatement.Append("   ").Append("cp:recipe");
-
-                var listCount = 0;
-                foreach (Recipe recipe in dish.Recipes)
-                {
-                    listCount++;
-                    SparqlUpdateStatement.Append("   ").AppendLine("[");
-                    SparqlUpdateStatement.Append("      ").AppendLine("a rdf:Seq;")
-                    .Append("      ").Append("      ").AppendLine("rdf:_" + listCount + " [")
-                    .Append("      ").Append("      ").AppendLine("a Recipe;");
-                    SparqlUpdateStatement.conditionalAppend("durationTime " , recipe.DurationTime);
-                    SparqlUpdateStatement.conditionalAppend("durationUnit " , recipe.DurationUnit);
-                    SparqlUpdateStatement.conditionalAppend("recipeType " , recipe.RecipeType);
-
-                    if (recipe.Steps != null)
-                    {
-                        SparqlUpdateStatement.Append("step");
-                        var stepCount = 0;
-                        foreach (Step step in recipe.Steps)
-                        {
-                            SparqlUpdateStatement.AppendLine("[").AppendLine("a rdf:Seq;").AppendLine("rdf:_" + stepCount + " [").AppendLine("a Step;");
-                            SparqlUpdateStatement.conditionalAppend("stepDescription ", step.Description);
-                            SparqlUpdateStatement.Append("]");
-                            stepCount++;
-                            SparqlUpdateStatement.AppendLine(stepCount == recipe.Steps.Count ? ";" : ",");
-
-                        }
-                    }
-                    SparqlUpdateStatement.Append("      ").Append("]");
-                    listCount++;
-                    SparqlUpdateStatement.Append("      ").AppendLine(listCount == dish.Recipes.Count ? ";" : ",");
-                }
-
-                SparqlUpdateStatement.AppendLine("}");
-
-                if (this.debug == true) { Console.WriteLine(SparqlUpdateStatement.ToString()); return dish; }
 
                 this._fuseki.Update(SparqlUpdateStatement.ToString());
             }

@@ -76,10 +76,14 @@ INSERT DATA
 }
 
 
-functional - eigenschaft (richtung parent ->child ) kann nur einmal existieren 
-inverse functional - eigenschaft (richtung child-> parent) kan nur 1x existieren
+functional - eigenschaft (richtung parent -> child ) kann nur 1x existieren 
+inverse functional - eigenschaft (richtung child-> parent) kann nur 1x existieren
 transitive - vererbung von parent -> child
 symmetrisch  - vollduplex verbindung
 asymmetrisch - gerichtete verbindung
 reflexiv - verbindung die start und ende im selben objekt hat
 irreflexiv - verbindung kann nicht im selben objekt enden wenn sie in ihm startet
+
+Schema
+Daten 
+RDF Tripel
