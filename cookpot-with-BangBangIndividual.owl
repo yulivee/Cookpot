@@ -151,13 +151,6 @@
               rdfs:range xsd:float .
 
 
-###  http://voiding-warranties.de/cookpot/1.0#recipeName
-:recipeName rdf:type owl:DatatypeProperty ;
-            rdfs:subPropertyOf owl:topDataProperty ;
-            rdfs:domain :Recipe ;
-            rdfs:range xsd:string .
-
-
 ###  http://voiding-warranties.de/cookpot/1.0#recipeType
 :recipeType rdf:type owl:DatatypeProperty ;
             rdfs:domain :Dish ;
@@ -309,6 +302,23 @@
 ###  http://voiding-warranties.de/cookpot/1.0#Teaspoon
 :Teaspoon rdf:type owl:NamedIndividual ,
                    :MeasureUnit .
+
+
+###  http://voiding-warranties.de/cookpot/1.0/Dishes#BangBangChicken
+cpDishes:BangBangChicken rdf:type owl:NamedIndividual ,
+                                  :Dish ;
+                         :hasCuisine :Chinese ;
+                         :hasOrigin cpDishes:China ,
+                                    cpDishes:Sichuan ;
+                         :dishAuthor "Judy"@en ;
+                         :dishDescription "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce."@en ;
+                         :dishSource "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/"@en ;
+                         :dishTitle "Bang Bang Chicken: The Authentic Sichuan Version"@en ;
+                         :recipeType "Chicken"@en ,
+                                     "Poultry"@en ;
+                         :servings 3 ;
+                         :servingsMax 4 ;
+                         :servingsMin 2 .
 
 
 ###  http://voiding-warranties.de/cookpot/1.0/Dishes#China

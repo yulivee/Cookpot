@@ -6,8 +6,9 @@ namespace cookpot.bl.DataModel
     public class Ingredient
     {
         public string Name { get; set; }
-        public Nullable<int> Amount { get; set; }
-        public UnitofMeasurement Measure { get; set; }
+        public Nullable<float> Amount { get; set; }
+        public Nullable<float> Measure { get; set; }
+        public UnitofMeasurement Unit { get; set; }
 
 
     }
