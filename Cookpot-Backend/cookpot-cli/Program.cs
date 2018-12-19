@@ -14,60 +14,84 @@ namespace cookpot.cli
             var sparqlEndpoint = new RDF("https://fuseki.voiding-warranties.de/cookpot/data");
             sparqlEndpoint.debug = true;
 
+            var China = new OriginCountry() {
+                Name = "China",
+            };
+
+            var Sichuan = new OriginRegion() {
+                Name = "Sichuan",
+            };
+
+            var Chinese = new Cuisine() {
+                Name = "chinese",
+            };
+
+            var Pounds = new UnitofMeasurement() {
+                Name = "lb",
+            };
+
+            var Tablespoon = new UnitofMeasurement() {
+                Name = "tbsp",
+            };
+
+            var Teaspoon = new UnitofMeasurement() {
+                Name = "tsp",
+            };
+
+            var Cup = new UnitofMeasurement() {
+                Name = "cup",
+            };
+
+            var Slice = new UnitofMeasurement() {
+                Name = "slice",
+            };
+
             var Ingredient1 = new Ingredient(){
                 Name = "large chicken breast", //@en
                 Amount = 1,
-                // cp:ingredientUnit cp:lb;
-                // Unit = "lb",
+                Unit = Pounds,
                 Measure = 0.5,
             };
 
             var Ingredient2 = new Ingredient(){
                 Name = "toasted sesame seed",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 2,
             };
 
             var Ingredient3 = new Ingredient(){
                 Name = "chili oil",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 1,
             };
 
             var Ingredient4 = new Ingredient(){
                 Name = "sesame oil",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 1.5,
             };
 
             var Ingredient5 = new Ingredient(){
                 Name = "sugar",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 2,
             };
 
             var Ingredient6 = new Ingredient(){
                 Name = "chinese dark vinegar",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 4,
             };
 
             var Ingredient7 = new Ingredient(){
                 Name = "light soy sauce",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 2,
             };
 
             var Ingredient8 = new Ingredient(){
                 Name = "chicken stock",
-                // cp:cup; 
-                // Unit = "cup",
+                Unit = Cup,
                 Measure = 0.5,
             };
 
@@ -78,29 +102,25 @@ namespace cookpot.cli
 
             var Ingredient10 = new Ingredient(){
                 Name = "scallion",
-                // cp:tbsp; 
-                // Unit = "tbsp",
+                Unit = Tablespoon,
                 Measure = 2,
             };
 
             var Ingredient11 = new Ingredient(){
                 Name = "ginger", //@en
-                // cp:slice; 
-                // Unit = "slice",
+                Unit = Slice,
                 Measure = 3,
             };
 
             var Ingredient12 = new Ingredient(){
                 Name = "ground sichuan pepper",
-                // cp:tsp; 
-                // Unit = "tsp",
+                Unit = Teaspoon,
                 Measure = 1, 
             };
 
             var Ingredient13 = new Ingredient(){
                 Name = "salt",
-                // cp:tsp; 
-                // Unit = "tsp",
+                Unit = Teaspoon,
                 Measure = 0.5,
             };
 
@@ -130,13 +150,6 @@ namespace cookpot.cli
             };
 
 
-/*
-    cpNS:BangBangChicken 
-        a cp:Dish;
-        cp:origin cp:china, cp:sichuan;
-        cp:cuisine cp:chinese;
-        cp:recipeType "Chicken","Poultry";
- */
             var BangBangChicken = new Dish() {
                 Title = "Bang Bang Chicken: The Authentic Sichuan Version",
                 Description = "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce.",
@@ -145,6 +158,20 @@ namespace cookpot.cli
                 ServingSize = 3,
                 ServingSizeMin = 2,
                 ServingSizeMax = 4,
+
+                Origins = new List<Origin>(){
+                    China,
+                    Sichuan
+                },
+
+                RecipeTypes = new List<string>(){
+                    "Chicken",
+                    "Poultry"
+                },
+
+                Cuisines = new List<Cuisine>() {
+                    Chinese
+                },
 
                 Ingredients = new List<Ingredient>() {
                     Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Ingredient9, Ingredient10, Ingredient11, Ingredient12, Ingredient13,

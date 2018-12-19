@@ -12,7 +12,6 @@ namespace cookpot.bl.DataModel
         ?s a cp:MeasureUnit.
         }
          */
-        public const Dictionary<string,string>{  { "Cup" => "cp" }, { "Liter" => "l" },  { "Milliliter" => "ml" }, { "Slice" => "slice" }, { "Tablespoon" => "tbsp" }, { "Teaspoon" => "tsp" } } Unit 
         public string Name { get; set; }
     }
 }

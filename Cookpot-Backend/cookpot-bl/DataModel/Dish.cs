@@ -10,6 +10,8 @@ namespace cookpot.bl.DataModel
         public Dish()
         {
             var ingredients = new List<Ingredient>();
+            var cuisines = new List<Cuisine>();
+            var origins = new List<Origin>();
             var recipes = new List<Recipe>();
             var users = new List<User>();
             var cookingUtensils = new List<CookingUtensil>();
@@ -20,6 +22,9 @@ namespace cookpot.bl.DataModel
         // things needed to prepare this dish (e.g. large pot)
         public List<CookingUtensil> CookingUtensils { get; set; }
 
+        public List<Origin> Origins { get; set; }
+        public List<string> RecipeTypes { get; set; }
+        public List<Cuisine> Cuisines { get; set; }
         public List<Ingredient> Ingredients { get; set; }
 
         public string Description { get; set; }

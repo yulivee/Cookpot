@@ -7,7 +7,7 @@ namespace cookpot.bl.DataModel
     {
         public Nullable<int> DurationTime { get; set; }
         public string DurationUnit { get; set; }
-        public string RecipeType { get; set; }
+        public string RecipeName { get; set; }
         public List<Step> Steps { get; set; }
     }
 }
