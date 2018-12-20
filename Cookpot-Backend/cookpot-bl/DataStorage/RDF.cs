@@ -7,7 +7,7 @@ using VDS.RDF.Query;
 using VDS.RDF.Parsing;
 using VDS.RDF.Storage;
 using System.Text;
-using VDS.RDF.Writing.Formatting;
+using VDS.RDF.Writing;
 
 namespace cookpot.bl.DataStorage
 {
@@ -15,6 +15,8 @@ namespace cookpot.bl.DataStorage
     {
 
         private readonly string _fusekiURI = "https://fuseki.voiding-warranties.de/cookpot/data";
+        private readonly string _cpNamespace = "http://voiding-warranties.de/cookpot/1.0#";
+        private readonly string _cpDishNamespace = "http://voiding-warranties.de/cookpot/1.0/Dishes/";
         private readonly string _graphURI = "";
 
         public bool debug = false;
@@ -31,22 +33,25 @@ namespace cookpot.bl.DataStorage
         public Dish Create(Dish dish)
         {
 
-
             var Graph = new Graph();
-            Graph.NamespaceMap.AddNamespace("cp", new Uri("http://voiding-warranties.de/cookpot/1.0#"));
-            Graph.NamespaceMap.AddNamespace("cpD", new Uri("http://voiding-warranties.de/cookpot/1.0/Dishes/"));
-            var NewDish = Graph.CreateUriNode("cpD:BangBangChicken");
-            var NewTitle = Graph.CreateLiteralNode("cp:title Bang Bang Chicken: The Authentic Sichuan Version","@en");
+            Graph.NamespaceMap.AddNamespace("", new Uri(this._cpNamespace));
+            Graph.NamespaceMap.AddNamespace("cpDishes", new Uri(this._cpDishNamespace));
+            var NewDish = Graph.CreateUriNode("cpDishes:"+Guid.NewGuid().ToString());
+            var Title = Graph.CreateLiteralNode(":title");
+            var NewTitle = Graph.CreateLiteralNode(dish.Title);
+
+            // ?s                   ?p       ?o
+            // cpNS:BangBangChicken cp:title "Bang Bang Chicken: The Authentic Sichuan Version"@en;
+            Graph.Assert(new Triple(NewDish, Title, NewTitle));
 
 
                 if (this.debug == true) { 
-                    var ttlFormatter = new UncompressedTurtleFormatter();
-                    Console.WriteLine(ttlFormatter.Format(NewDish)); 
+                    CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter();
+                    ttlWriter.Save(Graph,"debug.ttl");
                     return dish; 
                 }
 
-                this._fuseki.Update(SparqlUpdateStatement.ToString());
-            }
+                //this._fuseki.Update(SparqlUpdateStatement.ToString());
 
             return dish;
 
