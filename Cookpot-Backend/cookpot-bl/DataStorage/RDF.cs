@@ -52,10 +52,11 @@ namespace cookpot.bl.DataStorage
             var nameAttr = typeof(RdfNameAttribute);
             var fancyProps = dishType.GetProperties()
             .Where(x => 
-                    x.PropertyType == sType && 
-                    x.CustomAttributes.Any(y => y.AttributeType == nameAttr)
+                    x.PropertyType == sType// && 
+                    //x.CustomAttributes.Any(y => y.AttributeType == nameAttr)
             );
-            //fancyProps.First().Attributes
+            //var rdfName = fancyProps.First().CustomAttributes.First(x => x.AttributeType == nameAttr);
+            
 
 
             // ?s                   ?p       ?o
