@@ -34,10 +34,11 @@ namespace cookpot.bl.DataStorage
         {
 
             var Graph = new Graph();
+            Graph.BaseUri = new Uri(this._cpNamespace);
             Graph.NamespaceMap.AddNamespace("", new Uri(this._cpNamespace));
             Graph.NamespaceMap.AddNamespace("cpDishes", new Uri(this._cpDishNamespace));
             var NewDish = Graph.CreateUriNode("cpDishes:"+Guid.NewGuid().ToString());
-            var Title = Graph.CreateLiteralNode(":title");
+            var Title = Graph.CreateUriNode(":title");
             var NewTitle = Graph.CreateLiteralNode(dish.Title);
 
             // ?s                   ?p       ?o
