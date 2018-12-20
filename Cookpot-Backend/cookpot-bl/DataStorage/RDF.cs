@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using cookpot.bl;
 using cookpot.bl.DataModel;
@@ -8,6 +9,8 @@ using VDS.RDF.Parsing;
 using VDS.RDF.Storage;
 using System.Text;
 using VDS.RDF.Writing;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace cookpot.bl.DataStorage
 {
@@ -40,6 +43,20 @@ namespace cookpot.bl.DataStorage
             var NewDish = Graph.CreateUriNode("cpDishes:"+Guid.NewGuid().ToString());
             var Title = Graph.CreateUriNode(":title");
             var NewTitle = Graph.CreateLiteralNode(dish.Title);
+
+
+            var dishType = typeof(Dish);
+            Console.WriteLine(dishType);           
+            //x.Assembly.
+            var sType = typeof(string);
+            var nameAttr = typeof(RdfNameAttribute);
+            var fancyProps = dishType.GetProperties()
+            .Where(x => 
+                    x.PropertyType == sType && 
+                    x.CustomAttributes.Any(y => y.AttributeType == nameAttr)
+            );
+            //fancyProps.First().Attributes
+
 
             // ?s                   ?p       ?o
             // cpNS:BangBangChicken cp:title "Bang Bang Chicken: The Authentic Sichuan Version"@en;

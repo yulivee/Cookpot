@@ -26,7 +26,7 @@ namespace cookpot.bl.DataModel
         public List<string> RecipeTypes { get; set; }
         public List<Cuisine> Cuisines { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-
+        [RdfName("description")]
         public string Description { get; set; }
 
         // Person which wrote the recipe

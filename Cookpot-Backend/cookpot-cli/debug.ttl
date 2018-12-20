@@ -6,4 +6,4 @@
 @prefix : <http://voiding-warranties.de/cookpot/1.0#>.
 @prefix cpDishes: <http://voiding-warranties.de/cookpot/1.0/Dishes/>.
 
-<http://voiding-warranties.de/cookpot/1.0/Dishes/2a27cf4f-1833-423a-9c03-130c7433750e> <http://voiding-warranties.de/cookpot/1.0#title> "Bang Bang Chicken: The Authentic Sichuan Version".
+<http://voiding-warranties.de/cookpot/1.0/Dishes/5c06ac00-e38d-4676-bd31-bc7a5d37aa78> <http://voiding-warranties.de/cookpot/1.0#title> "Bang Bang Chicken: The Authentic Sichuan Version".
