@@ -17,7 +17,7 @@ namespace cookpot.bl.DataStorage
     public class RDF : IManager<Dish>
     {
 
-        private readonly string _fusekiURI = "https://fuseki.voiding-warranties.de/cookpot/data";
+        private readonly string _fusekiURI = "https://fuseki.voiding-warranties.de/cookpot-owl/data";
         private readonly string _cpNamespace = "http://voiding-warranties.de/cookpot/1.0#";
         private readonly string _cpDishNamespace = "http://voiding-warranties.de/cookpot/1.0/Dishes/";
         private readonly string _graphURI = "";
@@ -33,6 +33,17 @@ namespace cookpot.bl.DataStorage
             this._fuseki = new FusekiConnector(_fusekiURI);
         }
 
+        private void SerializeType ( IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish ){
+            
+            var rdfPredicate = graph.CreateUriNode(":"+property.Name.ToLower());
+            var propertyValue = property.GetMethod.Invoke(dish, new object[]{})?.ToString();
+            if ( propertyValue == null ){
+                return;
+            }
+            var rdfObject = graph.CreateLiteralNode( propertyValue );
+            graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
+        }
+
         public Dish Create(Dish dish)
         {
 
@@ -44,24 +55,28 @@ namespace cookpot.bl.DataStorage
             var Title = Graph.CreateUriNode(":title");
             var NewTitle = Graph.CreateLiteralNode(dish.Title);
 
-
             var dishType = typeof(Dish);
             Console.WriteLine(dishType);           
-            //x.Assembly.
-            var sType = typeof(string);
-            var nameAttr = typeof(RdfNameAttribute);
-            var fancyProps = dishType.GetProperties()
-            .Where(x => 
+            var fancyProps = dishType.GetProperties().Where( x => !(  x.PropertyType.IsGenericType
+            && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ) );
+
+            foreach ( var fancyProp in fancyProps ) {
+                Console.WriteLine(fancyProp.Name);
+                SerializeType(NewDish, Graph, fancyProp, dish);
+            }
+/*
+            .Where(x =>  
                     x.PropertyType == sType// && 
                     //x.CustomAttributes.Any(y => y.AttributeType == nameAttr)
             );
+            */
             //var rdfName = fancyProps.First().CustomAttributes.First(x => x.AttributeType == nameAttr);
             
 
 
             // ?s                   ?p       ?o
             // cpNS:BangBangChicken cp:title "Bang Bang Chicken: The Authentic Sichuan Version"@en;
-            Graph.Assert(new Triple(NewDish, Title, NewTitle));
+            //:Graph.Assert(new Triple(NewDish, Title, NewTitle));
 
 
                 if (this.debug == true) { 
@@ -71,6 +86,7 @@ namespace cookpot.bl.DataStorage
                 }
 
                 //this._fuseki.Update(SparqlUpdateStatement.ToString());
+                _fuseki.UpdateGraph("",Graph.Triples,Enumerable.Empty<Triple>());
 
             return dish;
 

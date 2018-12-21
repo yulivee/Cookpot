@@ -11,8 +11,8 @@ namespace cookpot.cli
     {
         static void Main(string[] args)
         {
-            var sparqlEndpoint = new RDF("https://fuseki.voiding-warranties.de/cookpot/data");
-            sparqlEndpoint.debug = true;
+            var sparqlEndpoint = new RDF("https://fuseki.voiding-warranties.de/cookpot-owl/data");
+            //sparqlEndpoint.debug = true;
 
             var China = new OriginCountry() {
                 Name = "China",
