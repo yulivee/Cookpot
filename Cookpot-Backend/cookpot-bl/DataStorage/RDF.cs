@@ -9,6 +9,7 @@ using VDS.RDF.Parsing;
 using VDS.RDF.Storage;
 using System.Text;
 using VDS.RDF.Writing;
+//using VDS.RDF.LiteralExtensions;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -44,6 +45,18 @@ namespace cookpot.bl.DataStorage
             graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
+        private void SerializeListType ( IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish ){
+            
+            var rdfPredicate = graph.CreateUriNode(":"+property.Name.ToLower());
+
+            var propertyValue = property.GetMethod.Invoke(dish, new object[]{})?.ToString();
+            if ( propertyValue == null ){
+                return;
+            }
+            var rdfObject = graph.CreateLiteralNode( propertyValue );
+           // graph.AssertList(new Triple(rdfSubject, rdfPredicate, rdfObject));
+        }
+
         public Dish Create(Dish dish)
         {
 
@@ -52,17 +65,25 @@ namespace cookpot.bl.DataStorage
             Graph.NamespaceMap.AddNamespace("", new Uri(this._cpNamespace));
             Graph.NamespaceMap.AddNamespace("cpDishes", new Uri(this._cpDishNamespace));
             var NewDish = Graph.CreateUriNode("cpDishes:"+Guid.NewGuid().ToString());
-            var Title = Graph.CreateUriNode(":title");
-            var NewTitle = Graph.CreateLiteralNode(dish.Title);
 
             var dishType = typeof(Dish);
             Console.WriteLine(dishType);           
-            var fancyProps = dishType.GetProperties().Where( x => !(  x.PropertyType.IsGenericType
+            var atomicProps = dishType.GetProperties().Where( x => !(  x.PropertyType.IsGenericType
+            && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ) );
+            var listProps = dishType.GetProperties().Where( x => (  x.PropertyType.IsGenericType
             && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ) );
 
-            foreach ( var fancyProp in fancyProps ) {
-                Console.WriteLine(fancyProp.Name);
-                SerializeType(NewDish, Graph, fancyProp, dish);
+
+            Console.WriteLine("==== Scalar Values ====");
+            foreach ( var atomicProp in atomicProps ) {
+                Console.WriteLine(atomicProp.Name);
+                SerializeType(NewDish, Graph, atomicProp, dish);
+            }
+
+            Console.WriteLine("===== List Values =====");
+            foreach ( var listProp in listProps ) {
+                Console.WriteLine(listProp.Name);
+                SerializeListType(NewDish, Graph, listProp, dish);
             }
 /*
             .Where(x =>  

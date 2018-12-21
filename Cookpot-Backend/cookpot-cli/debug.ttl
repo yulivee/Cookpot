@@ -6,11 +6,11 @@
 @prefix : <http://voiding-warranties.de/cookpot/1.0#>.
 @prefix cpDishes: <http://voiding-warranties.de/cookpot/1.0/Dishes/>.
 
-<http://voiding-warranties.de/cookpot/1.0/Dishes/09a91772-1f04-4534-9b7f-46b81d1fa3d3> :author "Judy";
-                                                                                       :description "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce.";
-                                                                                       :rating "0";
-                                                                                       :servingsize "3";
-                                                                                       :servingsizemax "4";
-                                                                                       :servingsizemin "2";
-                                                                                       :source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/";
-                                                                                       :title "Bang Bang Chicken: The Authentic Sichuan Version".
+cpDishes:ac988e1d-e113-41f6-9ae3-29f403805b9e :author "Judy";
+                                              :description "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce.";
+                                              :rating "0";
+                                              :servingsize "3";
+                                              :servingsizemax "4";
+                                              :servingsizemin "2";
+                                              :source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/";
+                                              :title "Bang Bang Chicken: The Authentic Sichuan Version".
