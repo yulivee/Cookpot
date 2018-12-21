@@ -37,7 +37,8 @@ namespace cookpot.bl.DataStorage
         private void SerializeType ( IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish ){
             
             var rdfPredicate = graph.CreateUriNode(":"+property.Name.ToLower());
-            var propertyValue = property.GetMethod.Invoke(dish, new object[]{})?.ToString();
+            var propertyValue = property.GetValue(dish)?.ToString();
+            //var propertyValue = property.GetMethod.Invoke(dish, new object[]{})?.ToString();
             if ( propertyValue == null ){
                 return;
             }
@@ -49,11 +50,17 @@ namespace cookpot.bl.DataStorage
             
             var rdfPredicate = graph.CreateUriNode(":"+property.Name.ToLower());
 
-            var propertyValue = property.GetMethod.Invoke(dish, new object[]{})?.ToString();
-            if ( propertyValue == null ){
+            var propertyValues = property.GetGetMethod().Invoke(dish,null); // .MemberType.ToString();
+            if ( propertyValues == null ){
                 return;
             }
-            var rdfObject = graph.CreateLiteralNode( propertyValue );
+
+            List<object> testing = ( propertyValues );
+
+            foreach ( var propertyValue in testing ) {
+                Console.WriteLine(propertyValue.ToString());
+                            }
+            //var rdfObject = graph.CreateLiteralNode( propertyValue );
            // graph.AssertList(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
