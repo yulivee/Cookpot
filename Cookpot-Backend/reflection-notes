@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
+using System.Collections;
+					
+public class Program
+{
+	public static void Main()
+	{		
+		var x = new Entity2() {
+			Key = "Sub"
+		};
+		var t = new Test() {
+			Alternative = "myKey",
+			Things = new List<string>() {"asdf"},
+			Test123 = 123,
+			exampleSubEntity = x
+		};
+		
+		//var e = t as IRdfEntity;
+		//Console.WriteLine(e.Identity);
+		
+		var g = new Graph();
+		
+		SerializeObject(g, t);
+	}
+	
+	public static void SerializeObject(Graph g, Object entity) {
+		var entityType = entity.GetType();
+		Console.WriteLine("things to serialize:");
+		foreach(var property in entityType.GetProperties()) {
+			if(property.GetMethod == null || property.SetMethod == null)
+				continue;
+			var valueOfProperty = property.GetMethod.Invoke(entity, null);
+			SerializeType(g, property.PropertyType, valueOfProperty);
+			
+		}
+	}
+	
+	public static void SerializeType(Graph g, Type type, Object value) {
+		var typeConverter = new Dictionary<Type, Action<object>>() {
+                {typeof(string), (x) => SerializeString(g, x as string)},
+                {typeof(int), (x) => SerializeInteger(g, (int)x)}
+            };
+		 if (typeConverter.TryGetValue(type, out var converterAction)) { //easy conversion
+         	converterAction(value);
+         } else if(type.IsClass && !type.IsGenericType) { //recursive class conversion
+			 SerializeObject(g, value);
+		 } else if(type.IsGenericType && type.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable))) { //some kind of collection
+			 SerializeEnumerable(g, value as IEnumerable, type.GenericTypeArguments[0]);
+		 }
+	}
+	
+	public static void SerializeEnumerable(Graph g, IEnumerable enumerable, Type enumerableType) {
+		Console.WriteLine("enumerable");
+		foreach (var element in enumerable) {
+        	SerializeType(g, enumerableType, element);
+        }
+	}
+	
+	public static void SerializeInteger(Graph g, int value)
+        {
+            Console.WriteLine($"int: {value}");
+        }
+
+    public static void SerializeString(Graph g, string value)
+        {
+            Console.WriteLine($"string: {value}");
+        }
+	
+    public interface IRdfEntity
+    {
+        string Identity { get; }
+    }
+
+    public class Test : IRdfEntity
+    {
+        public List<string> Things { get; set; }
+        public string Alternative { get; set; }
+		public int Test123 {get; set;}
+		public Entity2 exampleSubEntity {get; set;}
+
+        public string Identity => this.Alternative;
+    }
+	
+	public class Entity2 : IRdfEntity {
+		public string Key { get; set; }
+		public string Identity => this.Key;
+	}
+	
+	public class Triple {}
+    public class Graph { }
+}

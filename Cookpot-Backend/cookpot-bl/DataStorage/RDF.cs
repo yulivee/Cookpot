@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 using cookpot.bl;
 using cookpot.bl.DataModel;
 using VDS.RDF;
@@ -48,6 +49,17 @@ namespace cookpot.bl.DataStorage
 
         private void SerializeListType ( IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish ){
             
+            /*
+            cpNS:BangBangChicken cp:ingredient
+            [
+              a rdf:Ingredient;
+              cp:ingredientName "large chicken breast"@en;
+              cp:ingredientAmount 1;
+              cp:ingredientUnit cp:lb;
+              cp:ingredientMeasure 0.5 
+            ], 
+            */
+
             var rdfPredicate = graph.CreateUriNode(":"+property.Name.ToLower());
 
             var propertyValues = property.GetGetMethod().Invoke(dish,null); // .MemberType.ToString();
@@ -55,15 +67,23 @@ namespace cookpot.bl.DataStorage
                 return;
             }
 
-            List<object> testing = ( propertyValues );
+            Console.WriteLine(propertyValues.GetType());
+            List<object> propertyValue = ( propertyValues as IEnumerable<object>).Cast<object>().ToList();
+            ConvertList(propertyValue, property);
+            Console.WriteLine(propertyValue.GetType());
 
-            foreach ( var propertyValue in testing ) {
-                Console.WriteLine(propertyValue.ToString());
-                            }
+            foreach ( var propertyVal in propertyValue ) {
+                Console.WriteLine(propertyVal.ToString());
+            }
+
             //var rdfObject = graph.CreateLiteralNode( propertyValue );
            // graph.AssertList(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
+        public static object ConvertList ( List<object> value, PropertyInfo property){
+            var originalType = property.PropertyType.GenericTypeArguments.First();
+            return  value.Select(item => Convert.ChangeType(item, originalType)).ToList();
+        }
         public Dish Create(Dish dish)
         {
 
@@ -77,8 +97,11 @@ namespace cookpot.bl.DataStorage
             Console.WriteLine(dishType);           
             var atomicProps = dishType.GetProperties().Where( x => !(  x.PropertyType.IsGenericType
             && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ) );
-            var listProps = dishType.GetProperties().Where( x => (  x.PropertyType.IsGenericType
-            && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>) ) );
+            var listProps = dishType.GetProperties().Where( x =>
+             (  x.PropertyType.IsGenericType && 
+                x.PropertyType.GetGenericTypeDefinition() == typeof(List<>) 
+             ) 
+            );
 
 
             Console.WriteLine("==== Scalar Values ====");
