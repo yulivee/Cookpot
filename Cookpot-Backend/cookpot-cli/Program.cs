@@ -159,6 +159,16 @@ namespace cookpot.cli
                 ServingSizeMin = 2,
                 ServingSizeMax = 4,
 
+                Recipes = new List<Recipe>() {
+                    preparationRecipe,
+                    mainRecipe
+                },
+
+                Ingredients = new List<Ingredient>() {
+                    Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Ingredient9, Ingredient10, Ingredient11, Ingredient12, Ingredient13,
+                },
+
+
                 Origins = new List<Origin>(){
                     China,
                     Sichuan
@@ -172,16 +182,6 @@ namespace cookpot.cli
                 Cuisines = new List<Cuisine>() {
                     Chinese
                 },
-
-                Ingredients = new List<Ingredient>() {
-                    Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Ingredient9, Ingredient10, Ingredient11, Ingredient12, Ingredient13,
-                },
-
-                Recipes = new List<Recipe>() {
-                    preparationRecipe,
-                    mainRecipe
-                },
-
             };
 
             sparqlEndpoint.Create(BangBangChicken);

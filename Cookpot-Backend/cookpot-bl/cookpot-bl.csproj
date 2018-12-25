@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="dotnetrdf" Version="2.1.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -12,6 +12,7 @@ namespace cookpot.bl.DataModel
         ?s a cp:MeasureUnit.
         }
          */
+        [RdfName(":MeasureUnit")]
         public string Name { get; set; }
     }
 }
