@@ -52,6 +52,13 @@ namespace cookpot.bl.DataStorage
         {
 
             /*
+            cpNS:BangBangChicken cp:ingredient _blank.
+            _blank a rdf:Ingredient.
+            _blank cp:ingredientName "large chicken breast"@en.
+            _blank cp:ingredientAmount 1.
+            _blank cp:ingredientUnit cp:lb.
+            _blank cp:ingredientMeasure 0.5. 
+
             cpNS:BangBangChicken cp:ingredient
             [
               a rdf:Ingredient;
@@ -62,57 +69,48 @@ namespace cookpot.bl.DataStorage
             ], 
             */
 
-            var rdfPredicate = graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
-
+            // propertyValues = List of Objects from a List Property
             dynamic propertyValues = property.GetValue(dish, null);
             if (propertyValues == null)
             {
                 return;
             }
 
-            Console.WriteLine("Type of value list: "+propertyValues.GetType());
-
+            var rdfPredicate = graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
             var newBlankNode = graph.CreateBlankNode();
-            foreach ( var propertyVal in propertyValues ) {
-            Console.WriteLine("Type of individual value: "+propertyVal.GetType());
 
-            if ( propertyVal.GetType() != typeof(string)){
-                continue;
-            }
-            Console.WriteLine("Type of value: "+propertyVal.GetType().GetProperties());
-            IEnumerable<dynamic> propInfo = propertyVal.GetType().GetProperties();
+            Console.WriteLine(
+            rdfSubject.ToString() + " " +
+            rdfPredicate.ToString() + " " +
+            newBlankNode.ToString() +"."
+            );
 
-            foreach ( var info in propInfo) {
-                Console.WriteLine(info.GetType());
-                Console.WriteLine(info.GetGetMethod()?.Invoke(propertyVal, null));//+" "+info.GetCustomAttribute<RdfNameAttribute>().Name);
-
-            }
-
-            /*var atomicProps = propInfo.Where(x =>
-                         x.GetCustomAttribute<RdfNameAttribute>() != null
-                  );
-            foreach (var atomicProp in atomicProps)
+            // propertyVal = One Object from a List Property
+            foreach (var propertyVal in propertyValues)
             {
-                Console.WriteLine(atomicProp.Name);
-            }
- */
+                var propertyType = propertyVal.GetType();
+                Console.WriteLine("Type of individual value: " + propertyType);
+                if ( propertyType.Name.Contains("System")) {
+                    //This is a string,int,etc
+                    continue;
+                }
+                IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
 
-                Console.WriteLine(
-                    //newBlankNode.ToString()+" "+
-                    //propertyVal.GetType().GetProperties().GetCustomAttribute<RdfNameAttribute>().Name+" "+
-                    //propertyVal.GetType().GetProperties().GetValue(propertyVal)?.ToString()
-                );
-                //Console.WriteLine(propertyVal.ToString()+" "+property.PropertyType.GenericTypeArguments.First()+" "+property.GetCustomAttribute<RdfNameAttribute>().Name);
+                foreach (var info in propInfo)
+                {
+                    var propertyValue = info.GetValue(dish)?.ToString();
+                    if (propertyValue == null) { continue; }
+                    Console.WriteLine(
+                    newBlankNode.ToString() + " " +
+                    propertyValue); 
+                }
             }
-            
-            //var rdfObjec = graph.CreateLiteralNode( propertyValue );
-            // graph.AssertList(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
         public static object ConvertList(List<object> value, PropertyInfo property)
         {
             var originalType = property.PropertyType.GenericTypeArguments.First();
-            Console.WriteLine("original type: "+originalType);
+            Console.WriteLine("original type: " + originalType);
             return value.Select(item => Convert.ChangeType(item, originalType)).ToList();
         }
         public Dish Create(Dish dish)
@@ -147,7 +145,7 @@ namespace cookpot.bl.DataStorage
             Console.WriteLine("==== Scalar Values ====");
             foreach (var atomicProp in atomicProps)
             {
-                Console.WriteLine(atomicProp.Name+" "+atomicProp.GetCustomAttribute<RdfNameAttribute>().Name);
+                Console.WriteLine(atomicProp.Name + " " + atomicProp.GetCustomAttribute<RdfNameAttribute>().Name);
                 SerializeType(NewDish, Graph, atomicProp, dish);
             }
 
