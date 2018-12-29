@@ -38,9 +38,10 @@ namespace cookpot.bl.DataStorage
             this._fuseki = new FusekiConnector(_fusekiURI);
         }
 
-        private (string rdfPredicate, string rdfObject) SerializeType(PropertyInfo property, Dish dish)
+        private (string rdfPredicate, string rdfObject) SerializeType<T>(PropertyInfo property, T instance)
+        //private (string rdfPredicate, string rdfObject) SerializeType(PropertyInfo property, object instance)
         {
-            var rdfObject = property.GetValue(dish)?.ToString();
+            var rdfObject = property.GetValue(instance)?.ToString();
             if (rdfObject == null) { return ("", ""); }
             var rdfPredicate = property.GetCustomAttribute<RdfNameAttribute>().Name;
             if ( debug == true ) { Console.WriteLine(rdfPredicate +" "+ rdfObject); };
@@ -112,7 +113,8 @@ namespace cookpot.bl.DataStorage
             }
             else if (!isListProperty)
             {
-                var uriNode = SerializeType(dishProperty, dish);
+                var uriNode = SerializeType<Dish>(dishProperty, dish);
+                //var uriNode = SerializeType(dishProperty, dish);
                 SerializeNode(rdfSubject, uriNode.rdfPredicate, uriNode.rdfObject, graph);
             }
 
