@@ -88,9 +88,10 @@ namespace cookpot.bl.DataStorage
             // propertyVal = One Object from a List Property
             foreach (var propertyVal in propertyValues)
             {
-                var propertyType = propertyVal.GetType();
+                Type propertyType = propertyVal.GetType();
                 Console.WriteLine("Type of individual value: " + propertyType);
-                if ( propertyType.Name.Contains("System")) {
+                if ( propertyType.Namespace.Equals("System")) {
+                    Console.WriteLine("We caught a string!");
                     //This is a string,int,etc
                     continue;
                 }
@@ -98,20 +99,14 @@ namespace cookpot.bl.DataStorage
 
                 foreach (var info in propInfo)
                 {
-                    var propertyValue = info.GetValue(dish)?.ToString();
+                    var propertyValue = info.GetValue(propertyVal)?.ToString();
                     if (propertyValue == null) { continue; }
                     Console.WriteLine(
                     newBlankNode.ToString() + " " +
+                    info.GetCustomAttribute<RdfNameAttribute>().Name + " " +
                     propertyValue); 
                 }
             }
-        }
-
-        public static object ConvertList(List<object> value, PropertyInfo property)
-        {
-            var originalType = property.PropertyType.GenericTypeArguments.First();
-            Console.WriteLine("original type: " + originalType);
-            return value.Select(item => Convert.ChangeType(item, originalType)).ToList();
         }
         public Dish Create(Dish dish)
         {
@@ -123,6 +118,7 @@ namespace cookpot.bl.DataStorage
             var NewDish = Graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
 
             var dishType = typeof(Dish);
+            // var checkForGenericType = 
             var atomicProps = dishType.GetProperties()
             .Where(x =>
                        !(

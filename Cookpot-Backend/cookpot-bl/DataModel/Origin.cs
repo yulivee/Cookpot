@@ -12,21 +12,20 @@ namespace cookpot.bl.DataModel
     public class OriginCountry : Origin 
     {
         [RdfName(":OriginCountry")]
-        public string Name { get; set; }
+        public new string Name { get; set; }
 
     }
 
     public class OriginRegion : Origin 
     {
         [RdfName(":OriginRegion")]
-        public string Name { get; set; }
+        public new string Name { get; set; }
 
     }
     public class OriginCity : Origin 
     {
         [RdfName(":OriginCity")]
-        public string Name { get; set; }
+        public new string Name { get; set; }
 
     }
 }
-
