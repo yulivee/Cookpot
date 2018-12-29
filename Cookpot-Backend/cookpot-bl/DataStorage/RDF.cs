@@ -38,36 +38,18 @@ namespace cookpot.bl.DataStorage
             this._fuseki = new FusekiConnector(_fusekiURI);
         }
 
-        private void SerializeType(IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish)
+        private (string rdfPredicate, string rdfObject) SerializeType(PropertyInfo property, Dish dish)
         {
+            var rdfObject = property.GetValue(dish)?.ToString();
+            if (rdfObject == null) { return ("", ""); }
+            var rdfPredicate = property.GetCustomAttribute<RdfNameAttribute>().Name;
+            if ( debug == true ) { Console.WriteLine(rdfPredicate +" "+ rdfObject); };
 
-            var propertyValue = property.GetValue(dish)?.ToString();
-            if (propertyValue == null) { return; }
-            var rdfPredicate = graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
-            var rdfObject = graph.CreateLiteralNode(propertyValue);
-            graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
+            return (rdfPredicate, rdfObject);
         }
 
         private void SerializeListType(IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish)
         {
-
-            /*
-            cpNS:BangBangChicken cp:ingredient _blank.
-            _blank a rdf:Ingredient.
-            _blank cp:ingredientName "large chicken breast"@en.
-            _blank cp:ingredientAmount 1.
-            _blank cp:ingredientUnit cp:lb.
-            _blank cp:ingredientMeasure 0.5. 
-
-            cpNS:BangBangChicken cp:ingredient
-            [
-              a rdf:Ingredient;
-              cp:ingredientName "large chicken breast"@en;
-              cp:ingredientAmount 1;
-              cp:ingredientUnit cp:lb;
-              cp:ingredientMeasure 0.5 
-            ], 
-            */
 
             // propertyValues = List of Objects from a List Property
             dynamic propertyValues = property.GetValue(dish, null);
@@ -82,7 +64,7 @@ namespace cookpot.bl.DataStorage
             Console.WriteLine(
             rdfSubject.ToString() + " " +
             rdfPredicate.ToString() + " " +
-            newBlankNode.ToString() +"."
+            newBlankNode.ToString() + "."
             );
 
             // propertyVal = One Object from a List Property
@@ -90,9 +72,12 @@ namespace cookpot.bl.DataStorage
             {
                 Type propertyType = propertyVal.GetType();
                 Console.WriteLine("Type of individual value: " + propertyType);
-                if ( propertyType.Namespace.Equals("System")) {
-                    Console.WriteLine("We caught a string!");
+                if (propertyType.Namespace.Equals("System"))
+                {
                     //This is a string,int,etc
+                    Console.WriteLine("\nWe caught a string!");
+                    Console.WriteLine(rdfSubject.ToString() + " " +property.GetCustomAttribute<RdfNameAttribute>().Name +" " + propertyVal.ToString());
+                    Console.WriteLine();
                     continue;
                 }
                 IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
@@ -104,9 +89,33 @@ namespace cookpot.bl.DataStorage
                     Console.WriteLine(
                     newBlankNode.ToString() + " " +
                     info.GetCustomAttribute<RdfNameAttribute>().Name + " " +
-                    propertyValue); 
+                    propertyValue);
                 }
             }
+        }
+
+        private void SerializeNode(IUriNode rdfSubject, string RDFpredicate, string RDFobject, Graph graph)
+        {
+            var rdfPredicate = graph.CreateUriNode(RDFpredicate);
+            var rdfObject = graph.CreateLiteralNode(RDFobject);
+            graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
+        }
+
+        private void SerializeProperty(IUriNode rdfSubject, Graph graph, PropertyInfo dishProperty, Dish dish)
+        {
+
+            var isListProperty = dishProperty.PropertyType.IsGenericType && dishProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
+            if (isListProperty)
+            {
+                //IEnumerable<Triple> blankNode = SerializeListType(dishProperty, dish);
+                SerializeListType(rdfSubject, graph, dishProperty, dish);
+            }
+            else if (!isListProperty)
+            {
+                var uriNode = SerializeType(dishProperty, dish);
+                SerializeNode(rdfSubject, uriNode.rdfPredicate, uriNode.rdfObject, graph);
+            }
+
         }
         public Dish Create(Dish dish)
         {
@@ -118,54 +127,12 @@ namespace cookpot.bl.DataStorage
             var NewDish = Graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
 
             var dishType = typeof(Dish);
-            // var checkForGenericType = 
-            var atomicProps = dishType.GetProperties()
-            .Where(x =>
-                       !(
-                            x.PropertyType.IsGenericType
-                         && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
-                        )
-                         && x.GetCustomAttribute<RdfNameAttribute>() != null
-                  );
+            var dishProperties = dishType.GetProperties().Where(property => property.GetCustomAttribute<RdfNameAttribute>() != null);
 
-            var listProps = dishType.GetProperties()
-            .Where(x =>
-                        (
-                            x.PropertyType.IsGenericType
-                            && x.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
-                            && x.GetCustomAttribute<RdfNameAttribute>() != null
-                        )
-            );
-
-
-            Console.WriteLine("==== Scalar Values ====");
-            foreach (var atomicProp in atomicProps)
+            foreach (var dishProperty in dishProperties)
             {
-                Console.WriteLine(atomicProp.Name + " " + atomicProp.GetCustomAttribute<RdfNameAttribute>().Name);
-                SerializeType(NewDish, Graph, atomicProp, dish);
+                SerializeProperty(NewDish, Graph, dishProperty, dish);
             }
-
-            Console.WriteLine("===== List Values =====");
-            foreach (var listProp in listProps)
-            {
-                Console.WriteLine(listProp.Name);
-                var myType = listProp.GetType();
-                SerializeListType(NewDish, Graph, listProp, dish);
-            }
-            /*
-                        .Where(x => 
-                                x.PropertyType == sType// && 
-                                //x.CustomAttributes.Any(y => y.AttributeType == nameAttr)
-                        );
-                        */
-            //var rdfName = fancyProps.First().CustomAttributes.First(x => x.AttributeType == nameAttr);
-
-
-
-            // ?s                   ?p       ?o
-            // cpNS:BangBangChicken cp:title "Bang Bang Chicken: The Authentic Sichuan Version"@en;
-            //:Graph.Assert(new Triple(NewDish, Title, NewTitle));
-
 
             if (this.debug == true)
             {
@@ -174,7 +141,6 @@ namespace cookpot.bl.DataStorage
                 return dish;
             }
 
-            //this._fuseki.Update(SparqlUpdateStatement.ToString());
             _fuseki.UpdateGraph("", Graph.Triples, Enumerable.Empty<Triple>());
 
             return dish;

@@ -87,3 +87,20 @@ irreflexiv - verbindung kann nicht im selben objekt enden wenn sie in ihm starte
 Schema
 Daten 
 RDF Tripel
+
+
+cpNS:BangBangChicken cp:ingredient _blank.
+_blank a rdf:Ingredient.
+_blank cp:ingredientName "large chicken breast"@en.
+_blank cp:ingredientAmount 1.
+_blank cp:ingredientUnit cp:lb.
+_blank cp:ingredientMeasure 0.5. 
+
+cpNS:BangBangChicken cp:ingredient
+[
+    a rdf:Ingredient;
+    cp:ingredientName "large chicken breast"@en;
+    cp:ingredientAmount 1;
+    cp:ingredientUnit cp:lb;
+    cp:ingredientMeasure 0.5 
+], 
