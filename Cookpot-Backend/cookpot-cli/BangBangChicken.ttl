@@ -44,8 +44,8 @@
        cp:source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/"@en;
        cp:origin cp:china, cp:sichuan;
        cp:cuisine cp:chinese;
-          cp:recipeType "Chicken","Poultry";
-        cp:author "Judy";
+       cp:recipeType "Chicken","Poultry";
+       cp:author "Judy";
        cp:servings 3;
         cp:servingsMin 2;
         cp:servingsMax 4;

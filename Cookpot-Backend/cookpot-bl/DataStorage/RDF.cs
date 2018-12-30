@@ -38,8 +38,44 @@ namespace cookpot.bl.DataStorage
             this._fuseki = new FusekiConnector(_fusekiURI);
         }
 
-        private (string rdfPredicate, string rdfObject) SerializeType<T>(PropertyInfo property, T instance)
-        //private (string rdfPredicate, string rdfObject) SerializeType(PropertyInfo property, object instance)
+        private (INode rdfSubject, string rdfPredicate, string rdfObject) SerializeListType(Graph graph, PropertyInfo property, object objectInstance)
+        {
+
+            // propertyValues = List of Objects from a List Property
+            dynamic propertyValues = property.GetValue(objectInstance, null);
+            if (propertyValues == null)
+            {
+                return;
+            }
+
+            var rdfPredicate = graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
+            var newBlankNode = graph.CreateBlankNode();
+
+            // propertyVal = One Object from a List Property
+            foreach (var propertyVal in propertyValues)
+            {
+                Type propertyType = propertyVal.GetType();
+                Console.WriteLine("Type of individual value: " + propertyType);
+                if (propertyType.Namespace.Equals("System")) {
+                    //This is a string,int,etc
+                    Console.WriteLine(property.GetCustomAttribute<RdfNameAttribute>().Name +" " + propertyVal.ToString());
+                    continue;
+                }
+                IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
+
+                foreach (var info in propInfo) {
+                    var propertyValue = info.GetValue(propertyVal)?.ToString();
+                    if (propertyValue == null) { continue; }
+                    if ( info.PropertyType.IsGenericType ) {
+                        SerializeListType(graph, info, propertyValue);
+                    } else {
+                        SerializeNode(newBlankNode,info.GetCustomAttribute<RdfNameAttribute>().Name,propertyValue, graph);
+                    }
+                }
+            }
+        }
+
+        private (string rdfPredicate, string rdfObject) SerializeType(PropertyInfo property, object instance)
         {
             var rdfObject = property.GetValue(instance)?.ToString();
             if (rdfObject == null) { return ("", ""); }
@@ -49,72 +85,25 @@ namespace cookpot.bl.DataStorage
             return (rdfPredicate, rdfObject);
         }
 
-        private void SerializeListType(IUriNode rdfSubject, Graph graph, PropertyInfo property, Dish dish)
-        {
-
-            // propertyValues = List of Objects from a List Property
-            dynamic propertyValues = property.GetValue(dish, null);
-            if (propertyValues == null)
-            {
-                return;
-            }
-
-            var rdfPredicate = graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
-            var newBlankNode = graph.CreateBlankNode();
-
-            Console.WriteLine(
-            rdfSubject.ToString() + " " +
-            rdfPredicate.ToString() + " " +
-            newBlankNode.ToString() + "."
-            );
-
-            // propertyVal = One Object from a List Property
-            foreach (var propertyVal in propertyValues)
-            {
-                Type propertyType = propertyVal.GetType();
-                Console.WriteLine("Type of individual value: " + propertyType);
-                if (propertyType.Namespace.Equals("System"))
-                {
-                    //This is a string,int,etc
-                    Console.WriteLine("\nWe caught a string!");
-                    Console.WriteLine(rdfSubject.ToString() + " " +property.GetCustomAttribute<RdfNameAttribute>().Name +" " + propertyVal.ToString());
-                    Console.WriteLine();
-                    continue;
-                }
-                IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
-
-                foreach (var info in propInfo)
-                {
-                    var propertyValue = info.GetValue(propertyVal)?.ToString();
-                    if (propertyValue == null) { continue; }
-                    Console.WriteLine(
-                    newBlankNode.ToString() + " " +
-                    info.GetCustomAttribute<RdfNameAttribute>().Name + " " +
-                    propertyValue);
-                }
-            }
-        }
-
-        private void SerializeNode(IUriNode rdfSubject, string RDFpredicate, string RDFobject, Graph graph)
+        private void SerializeNode(INode rdfSubject, string RDFpredicate, string RDFobject, Graph graph)
         {
             var rdfPredicate = graph.CreateUriNode(RDFpredicate);
             var rdfObject = graph.CreateLiteralNode(RDFobject);
             graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
-        private void SerializeProperty(IUriNode rdfSubject, Graph graph, PropertyInfo dishProperty, Dish dish)
+        private void SerializeProperty(IUriNode rdfSubject, Graph graph, PropertyInfo objectProperty, object objectInstance)
         {
 
-            var isListProperty = dishProperty.PropertyType.IsGenericType && dishProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
+            var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
             if (isListProperty)
             {
                 //IEnumerable<Triple> blankNode = SerializeListType(dishProperty, dish);
-                SerializeListType(rdfSubject, graph, dishProperty, dish);
+                SerializeListType(rdfSubject, graph, objectProperty, objectInstance);
             }
             else if (!isListProperty)
             {
-                var uriNode = SerializeType<Dish>(dishProperty, dish);
-                //var uriNode = SerializeType(dishProperty, dish);
+                var uriNode = SerializeType(objectProperty, objectInstance);
                 SerializeNode(rdfSubject, uriNode.rdfPredicate, uriNode.rdfObject, graph);
             }
 
