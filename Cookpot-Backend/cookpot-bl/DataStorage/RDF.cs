@@ -38,51 +38,50 @@ namespace cookpot.bl.DataStorage
             this._fuseki = new FusekiConnector(_fusekiURI);
         }
 
-        private (INode rdfSubject, string rdfPredicate, string rdfObject) SerializeListType(Graph graph, PropertyInfo property, object objectInstance)
-        {
-
+        private void SerializeListType(INode rdfSubject, Graph graph, PropertyInfo property, object objectInstance) {
             // propertyValues = List of Objects from a List Property
             dynamic propertyValues = property.GetValue(objectInstance, null);
-            if (propertyValues == null)
-            {
+            var newBlankNode = graph.CreateBlankNode();
+            if (propertyValues == null) {
                 return;
             }
 
             var rdfPredicate = graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
-            var newBlankNode = graph.CreateBlankNode();
 
             // propertyVal = One Object from a List Property
-            foreach (var propertyVal in propertyValues)
-            {
+            foreach (var propertyVal in propertyValues) {
                 Type propertyType = propertyVal.GetType();
                 Console.WriteLine("Type of individual value: " + propertyType);
                 if (propertyType.Namespace.Equals("System")) {
                     //This is a string,int,etc
-                    Console.WriteLine(property.GetCustomAttribute<RdfNameAttribute>().Name +" " + propertyVal.ToString());
+                    SerializeProperty(rdfSubject, graph, property, propertyVal);
                     continue;
                 }
+
                 IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
 
-                foreach (var info in propInfo) {
+                foreach (var info in propInfo)
+                {
                     var propertyValue = info.GetValue(propertyVal)?.ToString();
                     if (propertyValue == null) { continue; }
-                    if ( info.PropertyType.IsGenericType ) {
-                        SerializeListType(graph, info, propertyValue);
-                    } else {
-                        SerializeNode(newBlankNode,info.GetCustomAttribute<RdfNameAttribute>().Name,propertyValue, graph);
+                    if (info.PropertyType.IsGenericType) {
+                        SerializeListType(newBlankNode, graph, info, propertyValue);
+                    }
+                    else {
+                        SerializeProperty(newBlankNode, graph, info, propertyValue);
                     }
                 }
             }
         }
 
-        private (string rdfPredicate, string rdfObject) SerializeType(PropertyInfo property, object instance)
+        private (INode rdfSubject, string rdfPredicate, string rdfObject) SerializeType(INode rdfSubject, Graph graph, PropertyInfo property, object instance)
         {
             var rdfObject = property.GetValue(instance)?.ToString();
-            if (rdfObject == null) { return ("", ""); }
+            if (rdfObject == null) { return (rdfSubject,"", ""); }
             var rdfPredicate = property.GetCustomAttribute<RdfNameAttribute>().Name;
-            if ( debug == true ) { Console.WriteLine(rdfPredicate +" "+ rdfObject); };
+            if (debug == true) { Console.WriteLine(rdfPredicate + " " + rdfObject); };
 
-            return (rdfPredicate, rdfObject);
+            return (rdfSubject, rdfPredicate, rdfObject);
         }
 
         private void SerializeNode(INode rdfSubject, string RDFpredicate, string RDFobject, Graph graph)
@@ -92,39 +91,40 @@ namespace cookpot.bl.DataStorage
             graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
-        private void SerializeProperty(IUriNode rdfSubject, Graph graph, PropertyInfo objectProperty, object objectInstance)
+        private void SerializeProperty(INode rdfSubject, Graph graph, PropertyInfo objectProperty, object objectInstance)
         {
-
+            // If its from namespace System, its a List/Enumerable etc. Objects are from Cookpot namespace
+            var isSystemProperty = objectProperty.GetType().Namespace.Contains("System");
             var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
-            if (isListProperty)
-            {
-                //IEnumerable<Triple> blankNode = SerializeListType(dishProperty, dish);
+
+            if (isListProperty && isSystemProperty) {
                 SerializeListType(rdfSubject, graph, objectProperty, objectInstance);
             }
-            else if (!isListProperty)
-            {
-                var uriNode = SerializeType(objectProperty, objectInstance);
-                SerializeNode(rdfSubject, uriNode.rdfPredicate, uriNode.rdfObject, graph);
+            else if (isListProperty && !isSystemProperty) {
+            //    SerializeObjectType(rdfSubject, graph, objectProperty, objectInstance);
             }
-
+            else if (!isListProperty) {
+                SerializeType(rdfSubject, graph, objectProperty, objectInstance);
+            }
         }
         public Dish Create(Dish dish)
         {
-
             var Graph = new Graph();
             Graph.BaseUri = new Uri(this._cpNamespace);
             Graph.NamespaceMap.AddNamespace("", new Uri(this._cpNamespace));
             Graph.NamespaceMap.AddNamespace("cpDishes", new Uri(this._cpDishNamespace));
             var NewDish = Graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
 
+            Serialize2RDF(NewDish,Graph,dish);
+
             var dishType = typeof(Dish);
             var dishProperties = dishType.GetProperties().Where(property => property.GetCustomAttribute<RdfNameAttribute>() != null);
 
+            // TODO: Just hand graph, First rdfSubject and Object into Serialize Property. Put the foreach loop into Serialize Property
             foreach (var dishProperty in dishProperties)
             {
                 SerializeProperty(NewDish, Graph, dishProperty, dish);
             }
-
             if (this.debug == true)
             {
                 CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter();
