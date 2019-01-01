@@ -60,17 +60,7 @@ namespace cookpot.bl.DataStorage
 
                 IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
 
-                foreach (var info in propInfo)
-                {
-                    var propertyValue = info.GetValue(propertyVal)?.ToString();
-                    if (propertyValue == null) { continue; }
-                    if (info.PropertyType.IsGenericType) {
-                        SerializeListType(newBlankNode, graph, info, propertyValue);
-                    }
-                    else {
-                        SerializeProperty(newBlankNode, graph, info, propertyValue);
-                    }
-                }
+                Serialize2RDF(newBlankNode, graph, propertyVal);
             }
         }
 
@@ -91,8 +81,7 @@ namespace cookpot.bl.DataStorage
             graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 
-        private void SerializeProperty(INode rdfSubject, Graph graph, PropertyInfo objectProperty, object objectInstance)
-        {
+        private void SerializeProperty(INode rdfSubject, Graph graph, PropertyInfo objectProperty, object objectInstance) {
             // If its from namespace System, its a List/Enumerable etc. Objects are from Cookpot namespace
             var isSystemProperty = objectProperty.GetType().Namespace.Contains("System");
             var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
@@ -107,6 +96,16 @@ namespace cookpot.bl.DataStorage
                 SerializeType(rdfSubject, graph, objectProperty, objectInstance);
             }
         }
+
+        private void Serialize2RDF( INode rdfSubject, Graph graph, object objectInstance ){
+            var objectType = objectInstance.GetType();  
+            var objectProperties = objectType.GetProperties().Where(property => property.GetCustomAttribute<RdfNameAttribute>() != null);
+            foreach (var dishProperty in objectProperties)
+            {
+                SerializeProperty(rdfSubject, graph, dishProperty, objectInstance);
+            }
+        }
+
         public Dish Create(Dish dish)
         {
             var Graph = new Graph();
@@ -115,16 +114,9 @@ namespace cookpot.bl.DataStorage
             Graph.NamespaceMap.AddNamespace("cpDishes", new Uri(this._cpDishNamespace));
             var NewDish = Graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
 
-            Serialize2RDF(NewDish,Graph,dish);
-
-            var dishType = typeof(Dish);
-            var dishProperties = dishType.GetProperties().Where(property => property.GetCustomAttribute<RdfNameAttribute>() != null);
+            Serialize2RDF(NewDish, Graph, dish);
 
             // TODO: Just hand graph, First rdfSubject and Object into Serialize Property. Put the foreach loop into Serialize Property
-            foreach (var dishProperty in dishProperties)
-            {
-                SerializeProperty(NewDish, Graph, dishProperty, dish);
-            }
             if (this.debug == true)
             {
                 CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter();
