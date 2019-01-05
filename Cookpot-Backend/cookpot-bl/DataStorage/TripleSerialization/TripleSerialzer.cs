@@ -34,9 +34,10 @@ namespace cookpot.bl.DataStorage.TripleSerialization
         public void Serialize2RDF( object objectInstance ){
             var objectType = objectInstance.GetType();
             var objectProperties = objectType.GetProperties().Where(property => property.GetCustomAttribute<RdfNameAttribute>() != null);
+            var NewEntry = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
             foreach (var objectProperty in objectProperties)
             {
-                SerializeProperty(rdfSubject, objectProperty, objectInstance);
+                SerializeProperty(NewEntry, objectProperty, objectInstance);
             }
         }
         public void SerializeProperty(INode rdfSubject, PropertyInfo objectProperty, object objectInstance) {
@@ -44,14 +45,15 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             var isSystemProperty = objectProperty.GetType().Namespace.Contains("System");
             var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
 
-            if (isListProperty && isSystemProperty) {
+            if (isListProperty && !isSystemProperty) {
                 SerializeListType(rdfSubject, objectProperty, objectInstance);
             }
-            else if (isListProperty && !isSystemProperty) {
+            else if (isListProperty && isSystemProperty) {
             //    SerializeObjectType(rdfSubject, graph, objectProperty, objectInstance);
             }
             else if (!isListProperty) {
-                SerializeType(rdfSubject, objectProperty, objectInstance);
+                var ( RdfSubject, RdfPredicate, RdfObject ) = SerializeType(rdfSubject, objectProperty, objectInstance);
+                SerializeNode(RdfSubject, RdfPredicate, RdfObject);
             }
         }
         public void SerializeListType(INode rdfSubject, PropertyInfo property, object objectInstance) {
@@ -72,13 +74,13 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                 #endif
                 if (propertyType.Namespace.Equals("System")) {
                     //This is a string,int,etc
-^                    SerializeProperty(rdfSubject, property, propertyVal);
+                    SerializeProperty(rdfSubject, property, propertyVal);
                     continue;
                 }
 
                 IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
 
-                Serialize2RDF(propertyVal);
+                //SerializeProperty(newBlankNode, propInfo, propertyVal);
             }
         }
 
@@ -89,7 +91,7 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             var rdfPredicate = property.GetCustomAttribute<RdfNameAttribute>().Name;
 
             #if DEBUG
-            Console.WriteLine(rdfPredicate + " " + rdfObject);
+            Console.WriteLine(rdfSubject + " " + rdfPredicate + " " + rdfObject);
             #endif
 
             return (rdfSubject, rdfPredicate, rdfObject);

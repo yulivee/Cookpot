@@ -46,7 +46,6 @@ namespace cookpot.bl.DataStorage
             graph.BaseUri = new Uri(this._cpNamespace);
             graph.NamespaceMap.AddNamespace("", new Uri(this._cpNamespace));
             graph.NamespaceMap.AddNamespace("cpDishes", new Uri(this._cpDishNamespace));
-            var NewEntry = graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
 			var serializer = new TripleSerializer(graph, graph);
 
 			serializer.Serialize2RDF(dish);
