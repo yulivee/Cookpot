@@ -32,14 +32,20 @@ namespace cookpot.bl.DataStorage.TripleSerialization
  */
 
         public void Serialize2RDF( object objectInstance ){
+            var NewEntry = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
+            StartSerializationProcess(NewEntry,objectInstance);
+        }
+
+        public void StartSerializationProcess(INode NewEntry, object objectInstance){
             var objectType = objectInstance.GetType();
             var objectProperties = objectType.GetProperties().Where(property => property.GetCustomAttribute<RdfNameAttribute>() != null);
-            var NewEntry = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
+
             foreach (var objectProperty in objectProperties)
             {
                 SerializeProperty(NewEntry, objectProperty, objectInstance);
             }
         }
+
         public void SerializeProperty(INode rdfSubject, PropertyInfo objectProperty, object objectInstance) {
             // If its from namespace System, its a List/Enumerable etc. Objects are from Cookpot namespace
             var isSystemProperty = objectProperty.GetType().Namespace.Contains("System");
@@ -78,9 +84,7 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                     continue;
                 }
 
-                IEnumerable<PropertyInfo> propInfo = propertyType.GetProperties();
-
-                //SerializeProperty(newBlankNode, propInfo, propertyVal);
+                StartSerializationProcess(newBlankNode, propertyVal);
             }
         }
 
