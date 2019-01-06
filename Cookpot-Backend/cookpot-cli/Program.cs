@@ -152,36 +152,35 @@ namespace cookpot.cli
 
             var BangBangChicken = new Dish() {
                 Title = "Bang Bang Chicken: The Authentic Sichuan Version",
-                Description = "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce.",
-                Author = "Judy",
-                Source = "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/",
-                ServingSize = 3,
-                ServingSizeMin = 2,
-                ServingSizeMax = 4,
+//                Description = "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce.",
+//                Author = "Judy",
+//                Source = "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/",
+//                ServingSize = 3,
+//                ServingSizeMin = 2,
+//                ServingSizeMax = 4,
 
-                Recipes = new List<Recipe>() {
-                    preparationRecipe,
-                    mainRecipe
-                },
+//                Recipes = new List<Recipe>() {
+//                    preparationRecipe,
+//                    mainRecipe
+//                },
 
-                Ingredients = new List<Ingredient>() {
-                    Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Ingredient9, Ingredient10, Ingredient11, Ingredient12, Ingredient13,
-                },
+//                Ingredients = new List<Ingredient>() {
+//                    Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Ingredient9, Ingredient10, Ingredient11, Ingredient12, Ingredient13,
+//                },
 
-
-                Origins = new List<Origin>(){
-                    China,
-                    Sichuan
-                },
+//                Origins = new List<Origin>(){
+//                    China,
+//                    Sichuan
+//                },
 
                 RecipeTypes = new List<string>(){
-                    "Chicken",
+                   "Chicken",
                     "Poultry"
                 },
 
-                Cuisines = new List<Cuisine>() {
-                    Chinese
-                },
+//                Cuisines = new List<Cuisine>() {
+//                    Chinese
+//                },
             };
 
             sparqlEndpoint.Create(BangBangChicken);

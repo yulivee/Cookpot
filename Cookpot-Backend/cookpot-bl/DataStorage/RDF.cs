@@ -32,8 +32,6 @@ namespace cookpot.bl.DataStorage
 
         public RDF(string uri, string graphURI = "")
         {
-            var uriFromFile = ConfigurationManager.AppSettings["fusekiURI"];
-            //Console.WriteLine(">>> URI from Config: {0}",uriFromFile);
             this._fusekiURI = uri;
             this._graphURI = graphURI;
             this._fuseki = new FusekiConnector(_fusekiURI);
