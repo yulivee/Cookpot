@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using cookpot.bl.DataModel;
 using VDS.RDF;
 using System.Reflection;
-
+using VDS.RDF.Writing;
 
 namespace cookpot.bl.DataStorage.TripleSerialization
 {
@@ -31,9 +31,19 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             _fuseki.UpdateGraph("", Graph.Triples, Enumerable.Empty<Triple>());
  */
 
+        public void WriteToGraph() {
+            #if DEBUG
+                CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter();
+                ttlWriter.Save(_graph, "debug.ttl");
+            #endif
+
+        }
+
         public void Serialize2RDF( object objectInstance ){
-            var NewEntry = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
-            StartSerializationProcess(NewEntry,objectInstance);
+            var rdfSubject = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
+            //TODO rename SerializeType
+            StartSerializationProcess(rdfSubject,objectInstance);
+            WriteToGraph();
         }
 
         public void StartSerializationProcess(INode NewEntry, object objectInstance){
@@ -47,15 +57,14 @@ namespace cookpot.bl.DataStorage.TripleSerialization
         }
 
         public void SerializeProperty(INode rdfSubject, PropertyInfo objectProperty, object objectInstance) {
-            // If its from namespace System, its a List/Enumerable etc. Objects are from Cookpot namespace
-            var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
+            var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(Enumerable);
+            // TODO: build dictionary to serialize atomic properties 
+            //var isAtomicProperty = checkAtomicProperty();
+            // if ( isAtomicProperty ) { serializeAtomicProperty (...) }
 
             if ( isListProperty ) {
                 SerializeListType(rdfSubject, objectProperty, objectInstance);
             }
-            //else if (isListProperty && isSystemProperty) {
-            //    SerializeObjectType(rdfSubject, graph, objectProperty, objectInstance);
-            //}
             else if (!isListProperty) {
                 var ( RdfSubject, RdfPredicate, RdfObject ) = SerializeType(rdfSubject, objectProperty, objectInstance);
                 SerializeNode(RdfSubject, RdfPredicate, RdfObject);
@@ -77,6 +86,11 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                 #if DEBUG
                 Console.WriteLine("Type of individual value: " + propertyType);
                 #endif
+                if (propertyType.Namespace.Equals("System")) {
+                    //This is a string,int,etc
+                    SerializeProperty(rdfSubject, property, propertyVal);
+                    continue;
+                }
 
                 StartSerializationProcess(newBlankNode, propertyVal);
             }
