@@ -52,9 +52,14 @@ namespace cookpot.bl.DataStorage
 
         }
 
-        public IEnumerable<Dish> Create(IEnumerable<Dish> objs)
+        public IEnumerable<Dish> Create(IEnumerable<Dish> dishes)
         {
-            throw new NotImplementedException();
+
+            foreach (var dish in dishes) {
+                Create(dish);
+            }
+            
+            return dishes;
         }
 
         public bool Delete(Dish obj)

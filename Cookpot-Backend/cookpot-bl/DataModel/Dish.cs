@@ -46,15 +46,15 @@ namespace cookpot.bl.DataModel
         public string Author { get; set; }
 
         // User rating of the tastyness of this dish
-        public int Rating { get; set; }
+        public Nullable<int> Rating { get; set; }
 
         // Number of servings of this Dish
         [RdfName(":servings")]
-        public int ServingSize { get; set; }
+        public Nullable<int> ServingSize { get; set; }
         [RdfName(":servingsMin")]
-        public int ServingSizeMin { get; set; }
+        public Nullable<int> ServingSizeMin { get; set; }
         [RdfName(":servingsMax")]
-        public int ServingSizeMax { get; set; }
+        public Nullable<int> ServingSizeMax { get; set; }
 
         // Source of the Recipe, e.g. URL or Bookname + Page
         [RdfName(":source")]
