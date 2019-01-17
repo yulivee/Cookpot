@@ -10,11 +10,11 @@ _:autos1 :OriginCountry "China"^^xsd:string;
          :OriginRegion "Sichuan"^^xsd:string.
 [] :Cuisine "chinese"^^xsd:string.
 _:autos4 :MeasureUnit "cookpot.bl.DataModel.UnitofMeasurement"^^xsd:string;
-         :amount "0,5"^^xsd:string,
+         :amount "0.5"^^xsd:string,
                  "1"^^xsd:string;
-         :measureValue "0,5"^^xsd:string,
+         :measureValue "0.5"^^xsd:string,
                        "1"^^xsd:string,
-                       "1,5"^^xsd:string,
+                       "1.5"^^xsd:string,
                        "2"^^xsd:string,
                        "3"^^xsd:string,
                        "4"^^xsd:string;
@@ -39,12 +39,12 @@ _:autos5 :DurationUnit "min"^^xsd:string;
 _:autos7 :stepDescription "Finally, pour the sauce over the chicken and cucumber, and serve. Toss the chicken and cucumber to coat with the sauce just before you’re ready to dig in!"^^xsd:string,
                           "Second, assemble the plate. Julienne the cucumber and spread it in an even layer on a shallow plate. Now, hammer the chicken with a rolling pin to flatten the meat and break it up into shreds. Layer the chicken on top of the cucumber."^^xsd:string,
                           "Third, prepare the sauce. Mix together the following: ½ cup chicken stock (i.e., the cooking water from the chicken), 2 tablespoons light soy sauce, 4 teaspoons Chinese dark vinegar, 2 tablespoons sugar, 1½ tablespoons sesame oil, 1 tablespoon chili oil (or to taste), 2 tablespoons toasted sesame seeds, 1 teaspoon ground Sichuan peppercorn, ½ teaspoon salt, and 2 tablespoons finely chopped scallions."^^xsd:string.
-<http://voiding-warranties.de/cookpot/1.0/Dishes/7ab02bb7-bb12-45fd-ab28-201a3ee8a436> :author "Judy"^^xsd:string;
-                                                                                       :dishDescription "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce."^^xsd:string;
-                                                                                       :recipeType "Chicken"^^xsd:string,
-                                                                                                   "Poultry"^^xsd:string;
-                                                                                       :servings "3"^^xsd:string;
-                                                                                       :servingsMax "4"^^xsd:string;
-                                                                                       :servingsMin "2"^^xsd:string;
-                                                                                       :source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/"^^xsd:string;
-                                                                                       :title "Bang Bang Chicken: The Authentic Sichuan Version"^^xsd:string.
+cpDishes:c451816a-8632-47d3-9bce-584989864b94 :author "Judy"^^xsd:string;
+                                              :dishDescription "This Bang Bang Chicken recipe is for the authentic Sichuan version of the dish, rather than the Americanized fried version, tossed in a spicy, tangy sauce."^^xsd:string;
+                                              :recipeType "Chicken"^^xsd:string,
+                                                          "Poultry"^^xsd:string;
+                                              :servings "3"^^xsd:string;
+                                              :servingsMax "4"^^xsd:string;
+                                              :servingsMin "2"^^xsd:string;
+                                              :source "https://thewoksoflife.com/2018/08/bang-bang-chicken-sichuan/"^^xsd:string;
+                                              :title "Bang Bang Chicken: The Authentic Sichuan Version"^^xsd:string.

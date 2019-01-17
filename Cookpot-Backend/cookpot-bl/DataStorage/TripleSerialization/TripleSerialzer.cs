@@ -28,11 +28,9 @@ namespace cookpot.bl.DataStorage.TripleSerialization
 
         public void WriteToGraph()
         {
-#if DEBUG
-            CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter();
+            CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter(){PrettyPrintMode = true};
             ttlWriter.Save(_graph, "debug.ttl");
-#endif
-
+            ttlWriter.ToString();
         }
 
         public void Serialize2RDF(object objectInstance)
