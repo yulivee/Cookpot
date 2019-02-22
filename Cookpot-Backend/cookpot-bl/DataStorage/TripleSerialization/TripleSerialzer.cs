@@ -26,18 +26,11 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                     _fuseki.UpdateGraph("", Graph.Triples, Enumerable.Empty<Triple>());
          */
 
-        public void WriteToGraph()
-        {
-            CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter(){PrettyPrintMode = true};
-            ttlWriter.Save(_graph, "debug.ttl");
-            ttlWriter.ToString();
-        }
 
         public void Serialize2RDF(object objectInstance)
         {
             var rdfSubject = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
             SerializeType(rdfSubject, objectInstance);
-            WriteToGraph();
         }
 
         public void SerializeType(INode NewEntry, object objectInstance)
