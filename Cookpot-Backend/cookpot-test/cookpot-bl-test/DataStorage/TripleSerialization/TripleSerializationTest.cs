@@ -30,12 +30,7 @@ namespace cookpot.bl.DataStorage.TripleSerialization
 
 			serializer.Serialize2RDF(dish);
 
-            CompressingTurtleWriter ttlWriter = new CompressingTurtleWriter(){PrettyPrintMode = true};
-            ttlWriter.Save(graph, "testdish.ttl");
-
-            TurtleParser ttlparser = new TurtleParser();
-            Graph graphFromFile = new Graph();
-            ttlparser.Load(graphFromFile, "testdish.ttl");
+            var triples = graph
 
             Assert.Equal(graph, graphFromFile);
 

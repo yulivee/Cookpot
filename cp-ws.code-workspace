@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "Cookpot-Backend"
+		}
+	],
+	"settings": {
+		"dotnet-test-explorer.enableTelemetry": false,
+		"dotnet-test-explorer.testProjectPath": "cookpot-test/**/*-test.csproj"
+	}
+}
