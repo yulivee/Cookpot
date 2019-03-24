@@ -26,11 +26,17 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                     _fuseki.UpdateGraph("", Graph.Triples, Enumerable.Empty<Triple>());
          */
 
-
-        public void Serialize2RDF(object objectInstance)
-        {
-            var rdfSubject = _graph.CreateUriNode("cpDishes:" + Guid.NewGuid().ToString());
+        public void Serialize2RDF(object objectInstance, string initialSubject){
+            var rdfSubject = _graph.CreateUriNode(initialSubject);
             SerializeType(rdfSubject, objectInstance);
+        }
+
+        public string Serialize2RDF(object objectInstance)
+        {
+            var cpBlanknode ="cpDishes:"+ Guid.NewGuid().ToString();
+            Serialize2RDF(objectInstance, cpBlanknode);
+
+            return cpBlanknode;
         }
 
         public void SerializeType(INode NewEntry, object objectInstance)
@@ -54,7 +60,9 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             var isListProperty = objectProperty.PropertyType.IsGenericType && objectProperty.PropertyType.GetGenericTypeDefinition() == typeof(List<>);
             var isPrimitiveType = objectType.IsPrimitive || objectType.IsValueType || (objectType == typeof(string));
             #if DEBUG
-            Console.WriteLine(nameof(SerializeProperty)+": "+objectProperty.Name + " " + objectInstance.GetType());
+            // z.B. TDoubleList System.Double
+            // TIntegerList cookpot.cli.Program+ListDatatypes
+            Console.WriteLine(nameof(SerializeProperty)+": "+ rdfSubject.ToString() + " " +objectProperty.Name + " " + objectInstance.GetType());
             #endif
 
             if (isListProperty && !isPrimitiveType) {
@@ -79,7 +87,8 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                 return;
             }
 
-            var rdfPredicate = _graph.CreateUriNode(property.GetCustomAttribute<RdfNameAttribute>().Name);
+           // SerializeProperty(rdfSubject, property, newBlankNode);
+           AppendToGraph(rdfSubject, "rdf:type", "List");
 
             // propertyVal = One Object from a List Property
             foreach (var propertyVal in propertyValues)
@@ -101,9 +110,9 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             }
         }
 
-        public (INode rdfSubject, string rdfPredicate, string rdfObject) SerializePrimitive(INode rdfSubject, PropertyInfo property, object instance)
+        public (INode rdfSubject, string rdfPredicate, object rdfObject) SerializePrimitive(INode rdfSubject, PropertyInfo property, object instance)
         {
-            var rdfObject = instance?.ToString();
+            var rdfObject = instance;
             if (rdfObject == null) { return (null, null, null); }
             var rdfPredicate = property.GetCustomAttribute<RdfNameAttribute>().Name;
 
@@ -113,9 +122,9 @@ namespace cookpot.bl.DataStorage.TripleSerialization
 
             return (rdfSubject, rdfPredicate, rdfObject);
         }
-        public (INode rdfSubject, string rdfPredicate, string rdfObject) SerializeScalar(INode rdfSubject, PropertyInfo property, object instance)
+        public (INode rdfSubject, string rdfPredicate, object rdfObject) SerializeScalar(INode rdfSubject, PropertyInfo property, object instance)
         {
-            var rdfObject = property.GetValue(instance)?.ToString();
+            var rdfObject = property.GetValue(instance);
             if (rdfObject == null) { return (null, null, null); }
             var rdfPredicate = property.GetCustomAttribute<RdfNameAttribute>().Name;
 
@@ -126,12 +135,31 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             return (rdfSubject, rdfPredicate, rdfObject);
         }
 
-        public void AppendToGraph(INode rdfSubject, string RDFpredicate, string RDFobject)
+        public void AppendToGraph(INode rdfSubject, string RDFpredicate, object RDFobject)
         {
             if (rdfSubject == null || RDFpredicate == null || RDFobject == null) { return; }
             var rdfPredicate = _graph.CreateUriNode(RDFpredicate);
             // https://github.com/dotnetrdf/dotnetrdf/wiki/UserGuide-Typed-Values-And-Lists
-            var rdfObject = RDFobject.ToLiteral(_graph);
+            ILiteralNode rdfObject;
+            if (RDFobject.GetType() == typeof(string)){
+                rdfObject = ((string) RDFobject).ToLiteral(_graph);
+            } 
+            else if ( RDFobject.GetType() == typeof(int) ){
+                rdfObject = ((int) RDFobject).ToLiteral(_graph);
+            }
+            else if ( RDFobject.GetType() == typeof(float) ){
+                rdfObject = ((float) RDFobject).ToLiteral(_graph);
+            }
+            else if ( RDFobject.GetType() == typeof(double) ){
+                rdfObject = ((double) RDFobject).ToLiteral(_graph);
+            }
+            else {
+                return;
+            }
+
+#if DEBUG
+            Console.WriteLine(nameof(AppendToGraph)+": " + rdfSubject + " " + rdfPredicate + " " + rdfObject);
+#endif
             _graph.Assert(new Triple(rdfSubject, rdfPredicate, rdfObject));
         }
 

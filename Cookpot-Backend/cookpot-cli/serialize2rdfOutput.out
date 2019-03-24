@@ -1,0 +1,31 @@
+SerializeProperty: TIntegerList cookpot.cli.Program+ListDatatypes
+SerializeProperty: TStringList cookpot.cli.Program+ListDatatypes
+SerializeProperty: TFloatList cookpot.cli.Program+ListDatatypes
+SerializeProperty: TDoubleList cookpot.cli.Program+ListDatatypes
+SerializeProperty: TNuclearDatatypeList cookpot.cli.Program+ListDatatypes
+SerializeList: Type of individual value: cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: TInteger cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TInteger 65532
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TInteger 65532^^http://www.w3.org/2001/XMLSchema#integer
+SerializeProperty: TString cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TString FooBar
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TString FooBar^^http://www.w3.org/2001/XMLSchema#string
+SerializeProperty: TFloat cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TFloat 3,14
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TFloat 3.14^^http://www.w3.org/2001/XMLSchema#float
+SerializeProperty: TDouble cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TDouble 2,76
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TDouble 2.76^^http://www.w3.org/2001/XMLSchema#double
+SerializeList: Type of individual value: cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: TInteger cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TInteger 67890
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TInteger 67890^^http://www.w3.org/2001/XMLSchema#integer
+SerializeProperty: TString cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TString FooBar
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TString FooBar^^http://www.w3.org/2001/XMLSchema#string
+SerializeProperty: TFloat cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TFloat 1,23
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TFloat 1.23^^http://www.w3.org/2001/XMLSchema#float
+SerializeProperty: TDouble cookpot.cli.Program+NuclearDatatypes
+SerializeScalar: _:autos5 :TDouble 4,56
+AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TDouble 4.56^^http://www.w3.org/2001/XMLSchema#double

@@ -96,6 +96,11 @@ _blank cp:ingredientAmount 1.
 _blank cp:ingredientUnit cp:lb.
 _blank cp:ingredientMeasure 0.5. 
 
+
+_:autos5 :TString FooBar1
+_:autos5 :TString FooBar2
+_:autos5 :TString FooBar3
+
 cpNS:BangBangChicken cp:ingredient
 [
     a rdf:Ingredient;
