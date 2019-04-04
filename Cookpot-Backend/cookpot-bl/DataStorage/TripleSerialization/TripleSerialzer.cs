@@ -66,7 +66,10 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             #endif
 
             if (isListProperty && !isPrimitiveType) {
-                SerializeList(rdfSubject, objectProperty, objectInstance);
+                var blankNode = _graph.CreateBlankNode();
+                AppendToGraph(rdfSubject, objectProperty.GetCustomAttribute<RdfNameAttribute>().Name, blankNode.ToString());
+                AppendToGraph(rdfSubject, "rdf:type", "List");
+                SerializeList(rdfSubject, blankNode, objectProperty, objectInstance);
             }
             else if (!isListProperty && !isPrimitiveType) {
                 var (RdfSubject, RdfPredicate, RdfObject) = SerializeScalar(rdfSubject, objectProperty, objectInstance);
@@ -77,18 +80,11 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                 AppendToGraph(RdfSubject, RdfPredicate, RdfObject);
             }
         }
-        public void SerializeList(INode rdfSubject, PropertyInfo property, object objectInstance)
+        public void SerializeList(INode rdfSubject,INode blankNode, PropertyInfo property, object objectInstance)
         {
             // propertyValues = List of Objects from a List Property
             dynamic propertyValues = property.GetValue(objectInstance, null);
-            var newBlankNode = _graph.CreateBlankNode();
-            if (propertyValues == null)
-            {
-                return;
-            }
-
-           // SerializeProperty(rdfSubject, property, newBlankNode);
-           AppendToGraph(rdfSubject, "rdf:type", "List");
+            if (propertyValues == null) { return; }
 
             // propertyVal = One Object from a List Property
             foreach (var propertyVal in propertyValues)
@@ -106,7 +102,7 @@ namespace cookpot.bl.DataStorage.TripleSerialization
 
                 }
 
-                SerializeType(newBlankNode, propertyVal);
+                SerializeType(blankNode, propertyVal);
             }
         }
 

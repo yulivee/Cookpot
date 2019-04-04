@@ -30,11 +30,11 @@ namespace cookpot.bl.DataStorage
 
         private FusekiConnector _fuseki;
 
-        public RDF(string uri, string graphURI = "")
+        public RDF(FusekiConnector _fuseki, string uri, string graphURI = "")
         {
             this._fusekiURI = uri;
             this._graphURI = graphURI;
-            this._fuseki = new FusekiConnector(_fusekiURI);
+            this._fuseki = _fuseki;
         }
 
 

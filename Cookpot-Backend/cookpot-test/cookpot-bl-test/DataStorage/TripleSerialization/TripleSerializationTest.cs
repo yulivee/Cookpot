@@ -141,7 +141,7 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             Assert.True(graph.ContainsTriple(doubleTriple2), "Double Triple 2 contained in graph");
         }
 
-        [Fact(Skip = "we need this later")]
+        [Fact]
         public void FloatListDatatype()
         {
             var ListTestInstance = new ListDatatypes()
@@ -169,7 +169,7 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             Assert.True(graph.ContainsTriple(floatTriple2), "Float Triple 2 contained in graph");
         }
 
-        [Fact(Skip = "we need this later")]
+        [Fact]
         public void StringListDatatype()
         {
             var ListTestInstance = new ListDatatypes()
@@ -227,6 +227,11 @@ namespace cookpot.bl.DataStorage.TripleSerialization
                 graph.CreateUriNode("rdf:type"),
                 ("List").ToLiteral(graph)
             );
+            Triple ListTypeTriple = new Triple(
+                rdfTestSubject,
+                graph.CreateUriNode(":TIntergerList"),
+                ("List").ToLiteral(graph)
+            );
             Assert.True(graph.ContainsTriple(intTriple1), "Integer Triple 1 contained in graph");
             Assert.True(graph.ContainsTriple(intTriple2), "Integer Triple 2 contained in graph");
             Assert.True(graph.ContainsTriple(ListTriple), "List Triple contained in graph");
@@ -239,8 +244,8 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             }
             Console.WriteLine();
         }
-/*
-        [Fact(Skip = "we need this later")]
+
+        [Fact]
         public void NuclearDatatypeListDatatype()
         {
             var AtomicTestInstance1 = new NuclearDatatypes()
@@ -288,10 +293,6 @@ namespace cookpot.bl.DataStorage.TripleSerialization
             Assert.True(graph.ContainsTriple(objectTriple2), "NuclearDatatype Triple 2 contained in graph");
         }
 
-
-
-
-*/
         [Fact(Skip = "we need this later")]
         public void SerializeDish()
         {

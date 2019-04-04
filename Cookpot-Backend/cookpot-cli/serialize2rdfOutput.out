@@ -1,31 +1,41 @@
-SerializeProperty: TIntegerList cookpot.cli.Program+ListDatatypes
-SerializeProperty: TStringList cookpot.cli.Program+ListDatatypes
-SerializeProperty: TFloatList cookpot.cli.Program+ListDatatypes
-SerializeProperty: TDoubleList cookpot.cli.Program+ListDatatypes
-SerializeProperty: TNuclearDatatypeList cookpot.cli.Program+ListDatatypes
+SerializeProperty: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 TIntegerList cookpot.cli.Program+ListDatatypes
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://voiding-warranties.de/cookpot/1.0#TIntegerList _:autos1^^http://www.w3.org/2001/XMLSchema#string
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://www.w3.org/1999/02/22-rdf-syntax-ns#type List^^http://www.w3.org/2001/XMLSchema#string
+SerializeProperty: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 TStringList cookpot.cli.Program+ListDatatypes
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://voiding-warranties.de/cookpot/1.0#TStringList _:autos2^^http://www.w3.org/2001/XMLSchema#string
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://www.w3.org/1999/02/22-rdf-syntax-ns#type List^^http://www.w3.org/2001/XMLSchema#string
+SerializeProperty: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 TFloatList cookpot.cli.Program+ListDatatypes
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://voiding-warranties.de/cookpot/1.0#TFloatList _:autos3^^http://www.w3.org/2001/XMLSchema#string
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://www.w3.org/1999/02/22-rdf-syntax-ns#type List^^http://www.w3.org/2001/XMLSchema#string
+SerializeProperty: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 TDoubleList cookpot.cli.Program+ListDatatypes
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://voiding-warranties.de/cookpot/1.0#TDoubleList _:autos4^^http://www.w3.org/2001/XMLSchema#string
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://www.w3.org/1999/02/22-rdf-syntax-ns#type List^^http://www.w3.org/2001/XMLSchema#string
+SerializeProperty: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 TNuclearDatatypeList cookpot.cli.Program+ListDatatypes
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://voiding-warranties.de/cookpot/1.0#TNuclearDatatypeList _:autos5^^http://www.w3.org/2001/XMLSchema#string
+AppendToGraph: http://voiding-warranties.de/cookpot/1.0/Dishes/NuclearDatatypeListTestInstance2 http://www.w3.org/1999/02/22-rdf-syntax-ns#type List^^http://www.w3.org/2001/XMLSchema#string
 SerializeList: Type of individual value: cookpot.cli.Program+NuclearDatatypes
-SerializeProperty: TInteger cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TInteger cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TInteger 65532
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TInteger 65532^^http://www.w3.org/2001/XMLSchema#integer
-SerializeProperty: TString cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TString cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TString FooBar
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TString FooBar^^http://www.w3.org/2001/XMLSchema#string
-SerializeProperty: TFloat cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TFloat cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TFloat 3,14
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TFloat 3.14^^http://www.w3.org/2001/XMLSchema#float
-SerializeProperty: TDouble cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TDouble cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TDouble 2,76
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TDouble 2.76^^http://www.w3.org/2001/XMLSchema#double
 SerializeList: Type of individual value: cookpot.cli.Program+NuclearDatatypes
-SerializeProperty: TInteger cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TInteger cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TInteger 67890
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TInteger 67890^^http://www.w3.org/2001/XMLSchema#integer
-SerializeProperty: TString cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TString cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TString FooBar
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TString FooBar^^http://www.w3.org/2001/XMLSchema#string
-SerializeProperty: TFloat cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TFloat cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TFloat 1,23
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TFloat 1.23^^http://www.w3.org/2001/XMLSchema#float
-SerializeProperty: TDouble cookpot.cli.Program+NuclearDatatypes
+SerializeProperty: _:autos5 TDouble cookpot.cli.Program+NuclearDatatypes
 SerializeScalar: _:autos5 :TDouble 4,56
 AppendToGraph: _:autos5 http://voiding-warranties.de/cookpot/1.0#TDouble 4.56^^http://www.w3.org/2001/XMLSchema#double
