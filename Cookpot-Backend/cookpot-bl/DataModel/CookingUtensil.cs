@@ -5,7 +5,7 @@ namespace cookpot.bl.DataModel
 
     public class CookingUtensil
     {
-        [RdfName("Utility")]
+        public int Id { get; set; }
         public string Name { get; set; }
 
     }

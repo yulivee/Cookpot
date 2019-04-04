@@ -3,29 +3,33 @@ using System.Collections.Generic;
 
 namespace cookpot.bl.DataModel
 {
-    public class Origin
+    public abstract class Origin
     {
-        [RdfName(":Origin")]
-        public string Name { get; set; }
+        
+        public virtual int Id { get; set; }
+        public virtual string Name { get; set; }
     }
 
     public class OriginCountry : Origin 
     {
-        [RdfName(":OriginCountry")]
-        public new string Name { get; set; }
+        
+        public override int Id { get; set; }
+        public override string Name { get; set; }
 
     }
 
     public class OriginRegion : Origin 
     {
-        [RdfName(":OriginRegion")]
-        public new string Name { get; set; }
+        
+        public override int Id { get; set; }
+        public override string Name { get; set; }
 
     }
     public class OriginCity : Origin 
     {
-        [RdfName(":OriginCity")]
-        public new string Name { get; set; }
+        
+        public override int Id { get; set; }
+        public override string Name { get; set; }
 
     }
 }
