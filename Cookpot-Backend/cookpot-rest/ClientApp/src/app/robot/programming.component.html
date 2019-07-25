@@ -1,0 +1,15 @@
+<h2>Define Simple Robot Program</h2>
+
+<textarea rows="10" cols="30" name="program"  [(ngModel)]="program"></textarea>
+
+
+  <table class='table table-striped'>
+    <tbody>
+      <tr>
+        <td><input type="button" value="Teach" (click)="teachCurrentPos()"></td>
+        <td><input type="button" value="Run Program" (click)="runProgram()"></td>
+        <td><input type="button" value="Pause Program" (click)="pauseProgram()"></td>
+        <td><input type="button" value="Stop/Motors off" (click)="stopProgram()"></td>
+      </tr>
+    </tbody>
+  </table>

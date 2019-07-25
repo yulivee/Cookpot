@@ -1,0 +1,23 @@
+<h2>Move Robot Arm to absolute position</h2>
+<h3>Drive to Point</h3>
+
+  <table class='table table-striped'>
+    <tbody>
+      <tr>
+        <td><b>J1 </b><input size="2" type="number" name="j1" value="0" [(ngModel)]="robot.joint1"></td>
+        <td><b>J2 </b><input size="4" type="number" name="j2" value="0" [(ngModel)]="robot.joint2"></td>
+        <td><b>J3 </b><input size="4" type="number" name="j3" value="0" [(ngModel)]="robot.joint3"></td>
+        <td><b>J4 </b><input size="4" type="number" name="j4" value="0" [(ngModel)]="robot.joint4"></td>
+        <td><b>J5 </b><input size="4" type="number" name="j5" value="0" [(ngModel)]="robot.joint5"></td>
+        <td><b>J6 </b><input size="4" type="number" name="j6" value="0" [(ngModel)]="robot.joint6"></td>
+        <td><b>Gripper </b><input size="4" type="number" name="gripper" value="0" [(ngModel)]="robot.gripper"></td>
+      </tr>
+      <tr>
+        <td>
+          <input type="button" value="Drive to Point" (click)="setPosition()">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Current Point: [ {{robot.joint1}}, {{robot.joint2}}, {{robot.joint3}}, {{robot.joint4}}, {{robot.joint5}}, {{robot.joint6}}, {{robot.gripper}} ] </p>
