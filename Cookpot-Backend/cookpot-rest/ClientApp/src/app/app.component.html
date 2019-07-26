@@ -1,24 +1,6 @@
-<body>
-  <mat-slide-toggle [checked]="motorState">Motor On</mat-slide-toggle>
-  <mat-tab-group>
-    <mat-tab label="Joint Drive">
-      <app-rel-drive></app-rel-drive>
-    </mat-tab>
-    <!--<mat-tab label="Drive To">
-      <app-abs-drive></app-abs-drive>
-    </mat-tab>-->
-    <mat-tab label="Parameters">
-      <app-parameters></app-parameters>
-    </mat-tab>
-    <mat-tab label="Custom Command">
-      <app-cust-cmd></app-cust-cmd>
-    </mat-tab>
-    <mat-tab label="Program">
-      <app-program></app-program>
-    </mat-tab>
-  </mat-tab-group>
-  
-  <!--<app-nav-menu></app-nav-menu>-->
-  <div class="container">    
-  </div>
-</body>
+<!--<app-nav-menu></app-nav-menu>-->
+<div class="container">
+  Hello World1: {{ localRecipe.Id }} <br>
+  Hello World2: {{(recipe | async).Id}} <br>
+  Hello World3: {{ localRecipe.Id }} <br>
+</div>

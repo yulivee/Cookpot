@@ -14,6 +14,7 @@ namespace cookport_rest.Controllers
         [HttpGet("dish")]
         public ActionResult<IEnumerable<string>> Get()
         {
+            return new Dish();
             return new string[] { "value1", "value2" };
         }
 

@@ -1,0 +1,1 @@
+export { mockData as mockRecipe } from './recipe';

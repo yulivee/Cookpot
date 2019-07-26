@@ -5,29 +5,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { AbsoluteDriveComponent } from './robot/abs-drive.component';
-import { RelativeDriveComponent } from './robot/rel-drive.component';
-import { RobotParametersComponent } from './robot/parameters.component';
-import { CustomCommandComponent } from './robot/commands.component';
-import { ProgrammingComponent } from './robot/programming.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatButtonModule, MatCardModule, MatGridListModule } from '@angular/material';
+import { RecipeComponent } from './components/recipe/recipe.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    RobotParametersComponent,
-    CustomCommandComponent,
-    ProgrammingComponent,
-    AbsoluteDriveComponent,
-    RelativeDriveComponent
+    RecipeComponent,
   ],
   exports: [
     MatTabsModule,
@@ -53,8 +39,8 @@ import { MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
+//      { path: '', component: HomeComponent, pathMatch: 'full' },
+//      { path: 'counter', component: CounterComponent },
     ])
   ],
   providers: [],
