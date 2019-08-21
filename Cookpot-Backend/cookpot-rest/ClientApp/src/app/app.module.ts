@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatButtonModule, MatCardModule, MatGridListModule } from '@angular/material';
+import { MatTabsModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatButtonModule, MatCardModule, MatGridListModule, MatToolbarModule, MatListModule } from '@angular/material';
 import { RecipeComponent } from './components/recipe/recipe.component';
 
 @NgModule({
@@ -35,6 +35,8 @@ import { RecipeComponent } from './components/recipe/recipe.component';
     MatCardModule,
     MatButtonModule,
     MatGridListModule,
+    MatToolbarModule,
+    MatListModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,

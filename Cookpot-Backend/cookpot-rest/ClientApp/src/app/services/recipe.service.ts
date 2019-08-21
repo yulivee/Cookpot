@@ -41,14 +41,14 @@ export class RecipeService {
   }
 
   public getCurrentRecipe(): Observable<Recipe> {
-    /*const mapToRecipe = this._responseHelper2(() => new Recipe());
+    const mapToRecipe = this._responseHelper2(() => new Recipe());
     const directMapToRecipe = ((res: AjaxResponse) => this._responseHelper1(res, () => new Recipe()));
     ajax('').pipe(
       map(directMapToRecipe)
     );
     ajax('').pipe(
       map(mapToRecipe)
-    );*/
+    );
     //this._http.get('').pipe(Map())
     return of(mockRecipe).pipe(delay(5000)).pipe(map((raw) => Object.assign(new Recipe(), raw)));
   }
