@@ -11,12 +11,16 @@ import { Recipe } from '../../../classes';
 export class RecipeComponent implements OnInit {
   public recipe$: Observable<Recipe>;
   public recipe: Recipe;
-  public devMode: boolean = false;
+  public devMode: boolean = true;
+  public columnsToDisplay = ['amount', 'name'];
 
   constructor(private _recipeService: RecipeService) {
   }
 
   ngOnInit(): void {
+    if ( this.devMode ) {
+      this.columnsToDisplay.unshift('id');
+    }
     this.recipe$ = this._recipeService.getCurrentRecipe();
     this.recipe$.subscribe(r => this.recipe = r);
   }

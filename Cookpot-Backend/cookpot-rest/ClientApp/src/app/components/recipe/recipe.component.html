@@ -1,11 +1,11 @@
 <div class="container">
   <h2>{{recipe.RecipeName}} <span *ngIf="devMode === true">Id: {{recipe.Id}}</span> </h2>
   <p *ngIf="recipe.DurationTime !== null && recipe.DurationUnit !== null">Zeit: {{recipe.DurationTime}} {{recipe.DurationUnit}}</p>
-  <h3>Zutaten</h3>
+  <h3>Zutaten</h3> 
   <table mat-table [dataSource]="recipe.Ingredients" style="border:1pt; border-style: dotted">
     <ng-container matColumnDef="id">
-      <th mat-header-cell  *matHeaderCellDef *ngIf="devMode === true">ID</th>  
-      <td mat-cell *matCellDef="let ingredient" *ngIf="devMode === true">{{ingredient.Id}}</td>  
+      <th mat-header-cell  *matHeaderCellDef>ID</th>  
+      <td mat-cell *matCellDef="let ingredient">{{ingredient.Id}}</td>  
     </ng-container>
 
     <ng-container matColumnDef="amount">
@@ -25,6 +25,10 @@
       <th mat-header-cell *matHeaderCellDef> Zutat </th>
       <td mat-cell *matCellDef="let ingredient"> {{ingredient.IngredientName}} </td>
     </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+
   </table>
   
   <h3>Zubereitung</h3>
